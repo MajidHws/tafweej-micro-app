@@ -1,18 +1,25 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, I18nManager } from 'react-native';
+
+import Tabs from './src/navigation/Tabs'
+import Stacks from './src/navigation/Stacks'
+
 
 export default function App() {
+
+  I18nManager.allowRTL(true)
+  I18nManager.forceRTL(true)
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <>
+      <Stacks />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffff',
     alignItems: 'center',
     justifyContent: 'center',
   },

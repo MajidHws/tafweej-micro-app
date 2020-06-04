@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21.699" height="21.717" viewBox="0 0 21.699 21.717">
+  <g id="circle" transform="translate(-1798.95 -1409.42)">
+    <path id="Remaining" d="M9.35,0A9.359,9.359,0,1,1,0,9.359,9.354,9.354,0,0,1,9.35,0Z" transform="translate(1800.45 1410.92)" fill="none" stroke="#cfd8dc" stroke-width="3"/>
+    <path id="Completed" d="M1809.812,1410.929a9.357,9.357,0,1,1-9.347,9.357" transform="translate(-0.013 -0.008)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="3" opacity="0.65"/>
+  </g>
+</svg>
