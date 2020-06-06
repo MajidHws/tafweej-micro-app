@@ -6,6 +6,7 @@ const Prayer = (props) => {
     return (
         <View style={styles.container}>
             <FlatList 
+            keyExtractor={(item, i) => String(i)}
             contentContainerStyle={{paddingHorizontal: 20, paddingTop: 10}}
             numColumns={2}
             data={[1, 2, 3, 4, 5, 6]}

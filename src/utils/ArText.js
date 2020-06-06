@@ -28,6 +28,23 @@ export const ArText = {
     showAll: 'عرض الجميع',
     deleteGuide: 'حذف',
     assignBatch: 'اسناد',
-    confirmDeleteGuide: 'هل انت متأكد من حذف المرشد؟'
+    confirmDeleteGuide: 'هل انت متأكد من حذف المرشد؟',
+    notifications: 'الاشعارات',
+    latestNotifications: 'اخر الاشعارات',
+    oldNotifications: 'اشعارات سابقة',
+    guideProfile: 'الصفحة الشخصية',
+    allBatches: 'كل الأفواج',
+    upcomingBatches: 'الرحلات القادمة',
+    prayerTimes: 'أوقات الصلاة',
+    tafweejIsDone: 'تم التفويج',
+    foujNotOutYet: 'الافواج التي لم يتم تفويجها',
+    foujDone: 'الافواج التي تم تفويجها',
+    remainingBatches: 'الافواج المتبقية',
+    since: 'منذ',
+    timeRemain: 'مبتقي',
+    previousBatch: 'الفوج السابق',
+    nextBatch: 'الفوج القادم',
+    confirmTrip: 'اعتماد الجولة'
+
 
 }

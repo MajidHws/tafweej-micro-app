@@ -4,11 +4,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/login/Login';
 import Intro from '../screens/intro/Intro';
+import FoujTrip from '../screens/foujTrip/FoujTrip';
+
 import Tabs from './Tabs'
+import GuideTabs from './GuideTabs'
+
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
 
 const LoginStackScreen = () => {
+
+    const tabNav = GuideTabs
+
     return (
         <LoginStack.Navigator>
             <LoginStack.Screen 
@@ -16,8 +23,7 @@ const LoginStackScreen = () => {
             component={Login}
             options={({ route }) => ({ headerShown: false })} />
             <LoginStack.Screen name="Intro" component={Intro} options={({ route }) => ({ headerShown: false })} />
-            <LoginStack.Screen name="Tabs" component={Tabs} options={({ route }) => ({headerShown: false})} />
-
+            <LoginStack.Screen name="Tabs" component={tabNav} options={({ route }) => ({headerShown: false})} />
         </LoginStack.Navigator>
     )
 }

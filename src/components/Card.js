@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 const Card = (props) => {
-    const {height, marginBottom, style, width} = props
+    const { height, marginBottom, style, width } = props
     return (
-        <View style={[styles.remainingTimeView, styles.shadow, {height: height || 80, marginBottom: marginBottom || 15}, style, width]}>
+        <View style={[
+            styles.remainingTimeView,
+            styles.shadow,
+            { height: height || 80, marginBottom: marginBottom || 15 },
+            style, width
+        ]}>
             {props.children}
         </View>
     )

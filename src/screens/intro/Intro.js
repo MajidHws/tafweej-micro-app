@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { StackActions } from '@react-navigation/native';
 
 import Swiper from 'react-native-swiper'
 
@@ -10,6 +11,8 @@ import img3 from '../../../assets/img/4.png'
 import { Colors } from '../../utils/Colors'
 import { ArText } from '../../utils/ArText'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+
+const {width, height} = Dimensions.get('screen')
 
 const Intro = (props) => {
 
@@ -49,6 +52,13 @@ const Intro = (props) => {
         )
     }
 
+    const _goToHome = () => {
+        // props.navigation.navigate('Tabs')
+        props.navigation.dispatch(
+            StackActions.replace('Tabs')
+        );
+    }
+
     const swiper = () => {
         return (
             <Swiper
@@ -78,7 +88,7 @@ const Intro = (props) => {
         <View style={styles.container}>
 
             <View style={styles.skipView}>
-                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => props.navigation.navigate('Tabs')}>
+                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => _goToHome()}>
                     <Text style={styles.skipText}>{ArText.skip}</Text>
                     <FontAwesome5 name="chevron-left" color={Colors.primary} size={15} />
                 </TouchableOpacity>
@@ -111,7 +121,7 @@ const styles = StyleSheet.create({
     },
     skipView: {
         position: 'absolute',
-        bottom: 153,
+        bottom: height * .17,
         right: 50,
         flexDirection: 'row',
         alignItems: 'center',

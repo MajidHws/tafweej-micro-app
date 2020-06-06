@@ -4,6 +4,7 @@ import {
     KeyboardAvoidingView, TouchableOpacity, Modal,
     TouchableHighlight, Dimensions
 } from 'react-native'
+import { StackActions } from '@react-navigation/native';
 
 import image from '../../../assets/img/1.png'
 import { Colors } from '../../utils/Colors'
@@ -18,7 +19,10 @@ const Login = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const toIntro = () => {
-        props.navigation.navigate('Intro')
+        // props.navigation.navigate('Intro')
+        props.navigation.dispatch(
+            StackActions.replace('Intro')
+        );
     }
 
     const modal = () => {
