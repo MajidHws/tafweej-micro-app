@@ -102,10 +102,10 @@ const Intro = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 70,
+        paddingTop: height * .05,
         flex: 1,
         backgroundColor: '#fff',
-        paddingBottom: 130
+        paddingBottom: height * .22
     },
     imageView: {
         justifyContent: 'center',
@@ -121,11 +121,13 @@ const styles = StyleSheet.create({
     },
     skipView: {
         position: 'absolute',
-        bottom: height * .17,
-        right: 50,
+        bottom: height * .18,
+        right: width * .05,
         flexDirection: 'row',
         alignItems: 'center',
-        zIndex: 10
+        zIndex: 10,
+        // backgroundColor: 'red',
+        marginHorizontal: 20,
     },
     skipText: {
         color: Colors.primary,

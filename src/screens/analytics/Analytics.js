@@ -97,9 +97,7 @@ const Analytics = (props) => {
                                 <Prayer />
                             </Tab>
                             <Tab heading={<TabHeading><FontAwesome5 name="thermometer-half" size={20} color={Colors.primary} /><Text style={styles.tabTitle}>{ArText.weather}</Text></TabHeading>}>
-                                <View>
-                                    <Text>One</Text>
-                                </View>
+                                <Weather />
                             </Tab>
 
                         </Tabs>

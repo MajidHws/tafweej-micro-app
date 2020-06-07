@@ -44,7 +44,9 @@ export const ArText = {
     timeRemain: 'مبتقي',
     previousBatch: 'الفوج السابق',
     nextBatch: 'الفوج القادم',
-    confirmTrip: 'اعتماد الجولة'
-
+    confirmTrip: 'اعتماد الجولة',
+    hour: 'الساعة',
+    tempDegree: 'درجة الحرارة',
+    status: 'الحالة'
 
 }
