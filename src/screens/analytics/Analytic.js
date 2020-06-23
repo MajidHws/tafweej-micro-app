@@ -8,6 +8,7 @@ import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import BatchStatus from '../../components/BatchStatus'
 
 const Analytic = (props) => {
+    const {batchesList, totalBatches, done, inProgress, notYet} = props
     return (
         
             <View style={styles.container}>
@@ -28,7 +29,7 @@ const Analytic = (props) => {
                             <Text style={styles.totalBatchesText}>{ArText.totalBatches}</Text>
                         </View>
                         <View style={styles.totalBatchesView}>
-                            <Text style={styles.totalBatches}>23</Text>
+                            <Text style={styles.totalBatches}>{totalBatches}</Text>
                         </View>
                     </View>
                 </Card>
@@ -42,7 +43,7 @@ const Analytic = (props) => {
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'flex-start' }}>
                                     <Text>{ArText.doneTafweej}</Text>
-                                    <Text>28</Text>
+                                    <Text>{done}</Text>
                                 </View>
                             </View>
                         </Card>
@@ -57,7 +58,7 @@ const Analytic = (props) => {
                                 </View>
                                 <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'flex-start' }}>
                                     <Text>{ArText.doneTafweej}</Text>
-                                    <Text>28</Text>
+                                    <Text>{notYet+inProgress}</Text>
                                 </View>
                             </View>
 
@@ -70,8 +71,8 @@ const Analytic = (props) => {
 
                     <FlatList
                         style={{flex: 1, height: 400}}
-                        data={[1, 2, 3, 4, 5, 6]}
-                        renderItem={() => <BatchStatus />}
+                        data={batchesList}
+                        renderItem={({item}) => <BatchStatus batch={item} />}
                         keyExtractor={(item, i) => String(i)}
                     />
 

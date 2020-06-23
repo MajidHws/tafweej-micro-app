@@ -59,14 +59,14 @@ const Login = (props) => {
                     'Authorization': `Bearer ${userToken}`
                 }
                 const result = await axios.get(`${ME_URL}`, { headers })
-                //console.log('2', result.data);
+                console.log('----', result.data);
 
-                if (result.data.user_type) {
+                if (result.data.user_type.id) {
                     const userInfo = JSON.stringify(result.data)
 
-                    // await AsyncStorage.setItem('userInfo', userInfo)
-                    // await AsyncStorage.setItem('userType', result.data.user_type.id)
-                    // await AsyncStorage.setItem('userToken', userToken)
+                    AsyncStorage.setItem('userInfo', userInfo)
+                    AsyncStorage.setItem('userType', String(result.data.user_type.id))
+                    AsyncStorage.setItem('userToken', userToken)
 
                     toIntro()
                 }

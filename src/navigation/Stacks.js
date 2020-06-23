@@ -22,7 +22,7 @@ const LoginStackScreen = () => {
     const _checkAuth = async () => {
         const userType = await AsyncStorage.getItem('userType')
         if (userType) {
-            tabNav = userType === 'مكتب' ?  GuideTabs: TabsTabs
+            tabNav = userType === 'مكتب' ?  GuideTabs: Tabs
             setChecking(true)
             
         } else {

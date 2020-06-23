@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, AsyncStorage, Dimensions, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, AsyncStorage, Dimensions, ImageBackground, ActivityIndicator } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { FontAwesome5 } from '@expo/vector-icons'
 
@@ -77,6 +77,7 @@ const Analytics = (props) => {
 
     const _fetchData = async () => {
         try {
+            setLoading(true)
             const userInfo = await AsyncStorage.getItem('userInfo')
             if (!userInfo) return alert('NO USER INFO')
             const userInfoJson = JSON.parse(userInfo)
@@ -85,15 +86,17 @@ const Analytics = (props) => {
             const result = await axios.get(url)
 
             const { batches, total, done, in_progress, not_yet } = result.data
-            
-            // setBatchesList(batches)
-            // setTotalBatches(total)
-            // setDone(done)
-            // setInProgress(in_progress)
-            // setNotYet(not_yet)
+
+            setBatchesList(batches)
+            setTotalBatches(total)
+            setDone(done)
+            setInProgress(in_progress)
+            setNotYet(not_yet)
 
             console.log(result.data)
+            setLoading(false)
         } catch (e) {
+            setLoading(false)
             console.log(e)
         }
     }
@@ -124,7 +127,18 @@ const Analytics = (props) => {
                 }}>
                     <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
                         <Tab heading={<TabHeading><FontAwesome5 name="train" size={20} color={Colors.primary} /><Text style={styles.tabTitle}>{ArText.analytic}</Text></TabHeading>}>
-                            <Analytic />
+
+                            {loading ? (
+                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                    <ActivityIndicator />
+                                </View>
+                            ) : <Analytic
+                                    batchesList={batchesList}
+                                    totalBatches={totalBatches}
+                                    done={done}
+                                    inProgress={inProgress}
+                                    notYet={notYet}
+                                />}
                         </Tab>
                         <Tab heading={<TabHeading><FontAwesome5 size={20} name="compass" color={Colors.primary} /><Text style={styles.tabTitle}>{ArText.prayer}</Text></TabHeading>}>
                             <Prayer />
@@ -149,7 +163,6 @@ const Analytics = (props) => {
         <>
             {_content()}
             {/* {MyTabs()} */}
-
         </>
     )
 }

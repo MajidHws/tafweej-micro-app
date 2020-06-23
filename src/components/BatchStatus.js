@@ -5,6 +5,7 @@ import { Colors } from '../utils/Colors'
 import { Container, Header, Content, Card, CardItem, Body } from 'native-base';
 
 const BatchStatus = (props) => {
+    const {batch} = props
 
     // const content = () => {
     //     return (
@@ -35,6 +36,7 @@ const BatchStatus = (props) => {
     //     </View>
     //     )
     // }
+    console.log('---', batch)
     return (
         
           <Card style={styles.container}>
@@ -47,16 +49,17 @@ const BatchStatus = (props) => {
                     </View>
 
                     <View style={styles.batchNumView}>
-                        <Text style={styles.batchNum}>Batch</Text>
+                        <Text style={styles.batchNum}>{batch.batche_id}</Text>
                     </View>
 
                     <View style={styles.batchTimeView}>
-                        <Text style={styles.batchTime}>Batch</Text>
+                        <Text style={styles.batchTime}>{batch.batch_times.length > 0 ?  
+                        `${batch.batch_times[0].dispatch_d_hour}:${batch.batch_times[0].dispatch_d_minute}` : '-'}</Text>
                     </View>
 
-                    <View style={styles.batchStatusView}>
-                        <Text style={styles.batchStatus}>Batch</Text>
-                    </View>
+                    {/* <View style={styles.batchStatusView}>
+                        <Text style={styles.batchStatus}>{'ll'}</Text>
+                    </View> */}
 
                 </View>
               {/* </Body> */}
