@@ -1,26 +1,68 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 import { Container, Header, Content, Card, CardItem, Body } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Colors } from '../utils/Colors';
 
+import axios from 'axios'
+
+import { updateReadiness } from '../settings/URLS'
+
 const InspectionForm = (props) => {
+
+    // Object {
+    //     "app_tafweej_requirement": Object {
+    //       "id": 1,
+    //       "name": "الزي لحملة اللوحات والمرشدين",
+    //     },
+    //     "app_tafweej_requirement_id": 1,
+    //     "id": 1,
+    //     "image": null,
+    //     "is_ready": 0,
+    //     "notes": null,
+    //     "user_id": 3,
+    //   }
+
+    const { app_tafweej_requirement: { id, name }, is_ready } = props.item
+    const [updating, setUpdating] = useState(false)
+    const [isReady, setIsReady] = useState(is_ready)
+
+    const _updateReadiness = async () => {
+        setUpdating(true)
+        try {
+            const result = await axios.post(updateReadiness, { id })
+            //const res = await fetch(URL)
+            //const result = await res.json()
+            console.log(result)
+            setIsReady(true)
+            setUpdating(false)
+        } catch (e) {
+            setUpdating(false)
+            console.log(e)
+        }
+    }
+
     return (
-        <Content style={styles.container}>
+        <Content style={styles.container} >
             <Card>
                 <CardItem>
                     <Body>
                         <View style={styles.contentContainer}>
                             <View style={styles.iconView}>
-                                <FontAwesome5 name="check" color={'green'} size={25} />
+                                {
+                                    updating ? (<ActivityIndicator />)
+                                        : (<TouchableOpacity onPress={_updateReadiness} >
+                                            <FontAwesome5 name="check" color={isReady ? 'green' : 'gray'} size={25} />
+                                        </TouchableOpacity>)
+                                }
                             </View>
                             <View style={styles.contentView}>
-                                <Text style={styles.contentTitle}>TITLE</Text>
-                                <TextInput
+                                <Text style={styles.contentTitle}>{name}</Text>
+                                {/* <TextInput
                                     style={styles.contentInput}
                                     placeholder="ملاحظات"
-                                />
+                                /> */}
                             </View>
                         </View>
                     </Body>
@@ -33,7 +75,7 @@ const InspectionForm = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginBottom: -8
+        marginBottom: -3
     },
     contentContainer: {
         flexDirection: 'row'

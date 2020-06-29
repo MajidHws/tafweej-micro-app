@@ -1,41 +1,97 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import TimeLine from 'react-native-timeline-theme'
 import TButton from '../../components/TButton'
-import ArText from '../../utils/ArText'
 import { Colors } from '../../utils/Colors'
 import { Card } from 'native-base'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { getMashaerResidence } from '../../settings/URLS'
+import axios from 'axios'
 const TimelineTab = (props) => {
 
-    const data = [
-        {
-            title: 'منى',
-            description: 'Remember tooth brushing and read notes on the tablet',
-            time: '',
-        },
-        {
-            title: 'عرفات',
-            description: 'Eat breakfast: bread and drink milk',
-            time: '',
-        },
-        {
-            title: 'مزدلفة',
-            description: 'Go to ABX Company and working react-native',
-            time: '',
+
+    const [masher, setMasher] = useState([])
+    const [loading, setLoading] = useState(false)
+    // const data = [
+    //     {
+    //         title: 'منى',
+    //         description: 'Remember tooth brushing and read notes on the tablet',
+    //         time: '',
+    //     },
+    //     {
+    //         title: 'عرفات',
+    //         description: 'Eat breakfast: bread and drink milk',
+    //         time: '',
+    //     },
+    //     {
+    //         title: 'مزدلفة',
+    //         description: 'Go to ABX Company and working react-native',
+    //         time: '',
+    //     }
+    // ]
+
+    const _fetchMahser = async () => {
+        try {
+            setLoading(true)
+            const result = await axios.get(getMashaerResidence)
+            //const res = await fetch(URL)
+            //const result = await res.json()
+            console.log(result.data)
+            result.data.forEach(d => {
+                d.time = ''
+            })
+            setMasher(result.data)
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+            console.log(e)
         }
-    ]
+    }
+
+
+    const _saveBatches = async () => {
+        try {
+            const result = await Axios.method(URL)
+            //const res = await fetch(URL)
+            //const result = await res.json()
+            console.log(result)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const onButtonPress = () => {
+        Alert.prompt(
+            'عدد الحجاج',
+            '',
+            [
+                {
+                    text: "إلغاء",
+                    onPress: () => _saveBatches,
+                    style: "cancel"
+                },
+                {
+                    text: "حفظ",
+                    onPress: () => null
+                }
+            ],
+            "plain-text",
+            '',
+            'number-pad'
+        );
+    };
+
 
 
     let counter = 0
     const _timelineItem = (item, i) => {
         counter = i + 1
         return (
-            <View style={i % 2 !== 0 ? { alignItems: 'flex-end' } : {}}>
-                <TouchableOpacity onPress={() => alert('DONE')}>
+            <View key={item.id} style={i % 2 !== 0 ? { alignItems: 'flex-end' } : {}}>
+                <TouchableOpacity onPress={() => alert(item.id)}>
                     <Card style={styles.timelineContentContainer}>
                         <View style={styles.timelineContentView}>
-                            <Text style={styles.timelinePoint}>{item.title}</Text>
+                            <Text style={styles.timelinePoint}>{item.name}</Text>
                         </View>
                     </Card>
                 </TouchableOpacity>
@@ -60,22 +116,29 @@ const TimelineTab = (props) => {
                     lineWidth={0.50}
                     contentContainerStyle={{ marginTop: 40 }}
                     timeFormat="hh"
-                    data={data}
+                    data={masher}
                     //isRenderSeperator
                     columnFormat={'two-column'}
                     renderDetail={(item, i) => _timelineItem(item, i)}
                     renderTimeBottom={(item) => _counterItem(item)}
                 />
 
-                <View style={styles.saveBtnView}>
+                {/* <View style={styles.saveBtnView}>
                     <TButton title={'حفظ'} />
-                </View>
+                </View> */}
             </>
         )
     }
+
+    useEffect(() => {
+        _fetchMahser()
+        return () => {
+
+        }
+    }, [])
     return (
         <>
-            {_content()}
+            {loading ? (<ActivityIndicator />) : _content()}
         </>
     )
 }
@@ -101,7 +164,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 45,
-        
+
     },
     timelinePoint: {
         color: Colors.primary

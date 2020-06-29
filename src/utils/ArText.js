@@ -47,6 +47,9 @@ export const ArText = {
     confirmTrip: 'اعتماد الجولة',
     hour: 'الساعة',
     tempDegree: 'درجة الحرارة',
-    status: 'الحالة'
+    status: 'الحالة',
+    numberOfPilgrims: 'عدد الحجاج',
+    numberOfPilgrimsAlertMsg: 'ddd',
+    number: 'العدد'
 
 }
