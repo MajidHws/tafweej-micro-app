@@ -5,14 +5,14 @@ import { Colors } from '../utils/Colors'
 const Batch = (props) => {
 
     const { length, i, batch } = props
-    // alert(batch)
+    console.log('---batch info', batch)
     return (
         <View style={[styles.container, length !== batch ? { borderLeftColor: Colors.borderColor, borderLeftWidth: .5 } : {}]}>
             <View style={styles.foujStatusView}>
                 <View style={styles.foujStatus} />
             </View>
             <View style={styles.foujNumberView}>
-                <Text style={styles.foujNumber}>Batch</Text>
+                <Text style={styles.foujNumber}>{batch.batche_id}</Text>
             </View>
             <View style={styles.foujGuideNameView}>
                 <Text style={styles.foujGuideName}>Batch</Text>

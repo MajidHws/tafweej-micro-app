@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, Dimensions, AsyncStorage, ActivityIndicator } from 'react-native'
 import img5 from '../../../assets/img/7.png'
 import { ArText } from '../../utils/ArText'
 const { height, width } = Dimensions.get('screen')
@@ -7,8 +7,47 @@ import { Container, Header, Tab, Tabs, TabHeading, Icon } from 'native-base';
 import { Colors } from '../../utils/Colors';
 import { FontAwesome5 } from '@expo/vector-icons'
 import FoujList from './FoujList'
-
+import { getDashboardBatches } from '../../settings/URLS'
+import axios from 'axios'
 const Fouj = (props) => {
+
+    const [loading, setLoading] = useState(false)
+    const [doneBatches, setDoneBatches] = useState([])
+    const [notDoneBatches, setNotDoneBatches] = useState([])
+    const _fetchData = async () => {
+        try {
+            setLoading(true)
+            const userInfo = await AsyncStorage.getItem('userInfo')
+            if (!userInfo) return alert('NO USER INFO')
+            const userInfoJson = JSON.parse(userInfo)
+            console.log('---', userInfoJson)
+            const url = `${getDashboardBatches}?user_id=${userInfoJson.id}&office_id=${userInfoJson.office_id}&user_type=${userInfoJson.user_type.id}&day=${'all'}`
+            const result = await axios.get(url)
+
+            const { batches, total, in_progress, not_yet } = result.data
+
+            // console.log('------ result.data', result.data.batches)
+            const done = [...result.data.batches].filter(batch => batch.dispatching_time === null)
+            const notDone = [...result.data.batches].filter(batch => batch.journey_end !== null)
+
+            console.log('---done--- result.data', done)
+            console.log('---notDone--- result.data', notDone)
+
+            setDoneBatches(done)
+            setNotDoneBatches(notDone)
+
+            
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        _fetchData()
+    }, [])
+
     return (
         <View style={styles.container}>
             <View style={styles.headerView}>
@@ -29,10 +68,10 @@ const Fouj = (props) => {
                 <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
 
                     <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.doneTafweej}</Text></TabHeading>}>
-                        <FoujList data={[]} />
+                        {loading ? (<ActivityIndicator />) : <FoujList data={doneBatches} />}
                     </Tab>
                     <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.didntDoTafweej}</Text></TabHeading>}>
-                        <FoujList data={[]} />
+                        {loading ? (<ActivityIndicator />) : <FoujList data={notDoneBatches} />}
                     </Tab>
 
                 </Tabs>

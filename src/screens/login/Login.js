@@ -28,9 +28,9 @@ const Login = (props) => {
     const [password, setPassword] = useState('1122334455')
     const [checkingAuth, setCheckingAuth] = useState(true)
 
-    //  AsyncStorage.removeItem('userInfo')
-    //  AsyncStorage.removeItem('userType')
-    //  AsyncStorage.removeItem('userToken')
+    // AsyncStorage.removeItem('userInfo')
+    // AsyncStorage.removeItem('userType')
+    // AsyncStorage.removeItem('userToken')
 
     const toIntro = () => {
         // props.navigation.navigate('Intro')
@@ -50,7 +50,7 @@ const Login = (props) => {
             const result = await axios.post(`${LOGIN_URL}?personal_id=${personalId}&password=${password}`, {}, { headers })
             // console.log(result.data)
             const userToken = result.data.access_token
-            setSigning(false)
+
 
             if (userToken) {
                 const headers = {
@@ -62,15 +62,18 @@ const Login = (props) => {
                 console.log('----', result.data);
 
                 if (result.data.user_type.id) {
-                    const userInfo = JSON.stringify(result.data)
 
+                    const userInfo = JSON.stringify(result.data)
+                    
                     AsyncStorage.setItem('userInfo', userInfo)
                     AsyncStorage.setItem('userType', String(result.data.user_type.id))
                     AsyncStorage.setItem('userToken', userToken)
 
                     toIntro()
+                    //setSigning(false)
+                    return
                 }
-
+                setSigning(false)
             }
         } catch (e) {
             setSigning(false)
@@ -112,7 +115,7 @@ const Login = (props) => {
     }
 
     useEffect(() => {
-        //_goToTabs()
+        _goToTabs()
     }, [])
 
     const _content = () => {
@@ -168,7 +171,7 @@ const Login = (props) => {
     }
     return (
         <>
-            {!checkingAuth ? (<ActivityIndicator />) : _content()}
+            {checkingAuth ? (<ActivityIndicator />) : _content()}
         </>
     )
 }

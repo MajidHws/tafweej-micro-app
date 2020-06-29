@@ -8,15 +8,15 @@ import Batch from '../../components/Btach'
 
 const FoujList = (props) => {
 
-    const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    const data = props.data
 
     return (
         <>
             <FlatList
                 contentContainerStyle={styles.flatListStyle}
-                data={data}
-                keyExtractor={(item, i) => String(item)}
-                renderItem={({item}, i) => <Batch batch={item} length={data.length} i={i} />}
+                data={props.data}
+                keyExtractor={(item, i) => String(i)}
+                renderItem={({item}) => <Batch batch={item} length={data.length} />}
             />
         </>
     )
