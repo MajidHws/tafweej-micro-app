@@ -161,14 +161,15 @@ const Guides = (props) => {
             <View style={styles.guidesListContainer}>
                 <View style={styles.guidesListView}>
                     <Text style={styles.guidesListTitle}>{ArText.theGuides}</Text>
-                    <TouchableOpacity>
+                    {/* <TouchableOpacity>
                         <Text style={styles.showAll}>{ArText.showAll}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <FlatList
-                    contentContainerStyle={{}}
-                    horizontal
-                    data={[1, 2, 3, 4, 5]}
+                    contentContainerStyle={{paddingVertical: 15}}
+                    //horizontal
+                    numColumns={3}
+                    data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
                     keyExtractor={(item, i) => String(i)}
                     renderItem={({ item }, i) => <GuideCard
                         assignBatch={assignBatch}
@@ -206,7 +207,7 @@ const Guides = (props) => {
                 {_search()}
                 <View style={styles.content}>
                     {_guidesList()}
-                    {_guidesList()}
+                    {/* {_guidesList()} */}
                 </View>
 
             </View>

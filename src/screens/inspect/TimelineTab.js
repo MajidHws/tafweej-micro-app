@@ -37,8 +37,9 @@ const TimelineTab = (props) => {
             //const res = await fetch(URL)
             //const result = await res.json()
             console.log(result.data)
-            result.data.forEach(d => {
+            result.data.forEach((d, i) => {
                 d.time = ''
+                d.id = i
             })
             setMasher(result.data)
             setLoading(false)
@@ -87,11 +88,11 @@ const TimelineTab = (props) => {
     const _timelineItem = (item, i) => {
         counter = i + 1
         return (
-            <View key={item.id} style={i % 2 !== 0 ? { alignItems: 'flex-end' } : {}}>
+            <View key={item.name} style={i % 2 !== 0 ? { alignItems: 'flex-end' } : {}}>
                 <TouchableOpacity onPress={() => onButtonPress(item.id)}>
                     <Card style={styles.timelineContentContainer}>
                         <View style={styles.timelineContentView}>
-                            <Text style={styles.timelinePoint}>{item.name}</Text>
+                            <Text style={styles.timelinePoint}>{item.id}</Text>
                         </View>
                     </Card>
                 </TouchableOpacity>
@@ -117,7 +118,7 @@ const TimelineTab = (props) => {
                     contentContainerStyle={{ marginTop: 40 }}
                     timeFormat="hh"
                     data={masher}
-                    //isRenderSeperator
+                    //isRenderSeparator
                     columnFormat={'two-column'}
                     renderDetail={(item, i) => _timelineItem(item, i)}
                     renderTimeBottom={(item) => _counterItem(item)}
