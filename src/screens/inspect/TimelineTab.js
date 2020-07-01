@@ -88,7 +88,7 @@ const TimelineTab = (props) => {
         counter = i + 1
         return (
             <View key={item.id} style={i % 2 !== 0 ? { alignItems: 'flex-end' } : {}}>
-                <TouchableOpacity onPress={() => alert(item.id)}>
+                <TouchableOpacity onPress={() => onButtonPress(item.id)}>
                     <Card style={styles.timelineContentContainer}>
                         <View style={styles.timelineContentView}>
                             <Text style={styles.timelinePoint}>{item.name}</Text>
