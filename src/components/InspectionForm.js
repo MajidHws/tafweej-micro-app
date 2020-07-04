@@ -28,15 +28,23 @@ const InspectionForm = (props) => {
     const [updating, setUpdating] = useState(false)
     const [isReady, setIsReady] = useState(is_ready)
 
+    console.log('is ready', is_ready)
     const _updateReadiness = async () => {
         setUpdating(true)
         try {
+
+
+            console.log(updateReadiness, id);
+            
             const result = await axios.post(updateReadiness, { id })
             //const res = await fetch(URL)
             //const result = await res.json()
+            console.log(isReady);
+            
             console.log(result)
-            setIsReady(true)
+            setIsReady(!isReady)
             setUpdating(false)
+
         } catch (e) {
             setUpdating(false)
             console.log(e)

@@ -9,16 +9,16 @@ const Batch = (props) => {
     return (
         <View style={[styles.container, length !== batch ? { borderLeftColor: Colors.borderColor, borderLeftWidth: .5 } : {}]}>
             <View style={styles.foujStatusView}>
-                <View style={styles.foujStatus} />
+                <View style={batch.dispatching_time && !batch.return_to_camp ? styles.foujStatus_out : styles.foujStatus} />
             </View>
             <View style={styles.foujNumberView}>
                 <Text style={styles.foujNumber}>{batch.batche_id}</Text>
             </View>
             <View style={styles.foujGuideNameView}>
-                <Text style={styles.foujGuideName}>Batch</Text>
+                <Text style={styles.foujGuideName}></Text>
             </View>
             <View style={styles.foujTimeView}>
-                <Text style={styles.foujTime}>Batch</Text>
+                <Text style={styles.foujTime}></Text>
             </View>
         </View>
     )
@@ -46,6 +46,15 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         left: -5
     },
+    foujStatus_out: {
+        backgroundColor: 'green',
+        height: 10,
+        width: 10,
+        borderRadius: 5,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        left: -5
+    },
     foujNumberView: {
         flex: 1,
         // justifyContent: 'center',
@@ -56,7 +65,8 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         textAlign: 'left',
         marginHorizontal: 10,
-        top: -5
+        top: -5,
+        fontSize: 15
     },
     foujGuideNameView: {
         flex: 1,

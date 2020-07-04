@@ -76,6 +76,7 @@ const Analytics = (props) => {
     }
 
     const _fetchData = async () => {
+        
         try {
             setLoading(true)
             const userInfo = await AsyncStorage.getItem('userInfo')
@@ -84,10 +85,21 @@ const Analytics = (props) => {
             console.log('---', userInfoJson)
             const url = `${getDashboardBatches}?user_id=${userInfoJson.id}&office_id=${userInfoJson.office_id}&user_type=${userInfoJson.user_type.id}&day=${'all'}`
             const result = await axios.get(url)
-
             const { batches, total, done, in_progress, not_yet } = result.data
+                        
+            const list = [
+                { title: 9, data: batches['9'] || []},
+                { title: 10, data: batches['10'] || []},
+                { title: 11, data: batches['11'] || []},
+                { title: 12, data: batches['12'] || []},
+                { title: 13, data: batches['13'] || []},
+            ]
 
-            setBatchesList(batches)
+            
+            console.log('----', list);
+
+
+            setBatchesList(list)
             setTotalBatches(total)
             setDone(done)
             setInProgress(in_progress)
@@ -129,7 +141,7 @@ const Analytics = (props) => {
                         <Tab heading={<TabHeading><FontAwesome5 name="train" size={20} color={Colors.primary} /><Text style={styles.tabTitle}>{ArText.analytic}</Text></TabHeading>}>
 
                             {loading ? (
-                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                     <ActivityIndicator />
                                 </View>
                             ) : <Analytic

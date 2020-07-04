@@ -6,20 +6,25 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ArText } from '../utils/ArText'
 
 const GuideCard = (props) => {
-    const {assignBatch, setAssignBatch, deleteGuide, setDeleteGuide} = props
+    const { assignBatch, setAssignBatch, deleteGuide, setDeleteGuide, guide, removeGuide, setSelectedUserId } = props
     return (
         <View style={styles.container}>
             <Card height={120} style={styles.cardStyle}>
                 <View style={styles.content}>
                     <Image height={20} width={20} source={require('../../assets/img/guideAvatar.png')} />
-                    <Text style={styles.guideName}>Name</Text>
-                    <Text style={styles.foujNum}>Foujs Num</Text>
+                    <Text style={styles.guideName}>{guide.name}</Text>
+                    <Text style={styles.foujNum}>{guide.batches ? guide.batches.length : 0}</Text>
                 </View>
                 <View style={styles.actionView}>
-                    <TouchableOpacity onPress={() => setAssignBatch(true)}>
+                    <TouchableOpacity onPress={() => {
+                        setAssignBatch(true)
+                        setSelectedUserId(guide.id)
+                    }}>
                         <Text style={styles.actionAssign}>{ArText.assignBatch}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setDeleteGuide(true)}>
+                    <TouchableOpacity onPress={() => {
+                        removeGuide(guide.id)
+                    }}>
                         <Text style={styles.actionDelete}>{ArText.deleteGuide}</Text>
                     </TouchableOpacity>
                 </View>
@@ -59,12 +64,12 @@ const styles = StyleSheet.create({
         paddingBottom: 3
     },
     actionAssign: {
-color: Colors.secondary,
+        color: Colors.secondary,
         fontSize: 13,
     },
     actionDelete: {
-fontSize: 13,
-color: 'gray'
+        fontSize: 13,
+        color: 'gray'
     }
 })
 

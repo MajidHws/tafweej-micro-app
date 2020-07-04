@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground, Dimensions, FlatList, AsyncStorage, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, Dimensions, 
+    FlatList, AsyncStorage, ActivityIndicator, Button } from 'react-native'
 import img5 from '../../../assets/img/7.png'
 import { ArText } from '../../utils/ArText'
 const { height, width } = Dimensions.get('screen')
@@ -10,7 +11,7 @@ import InspectionForm from '../../components/InspectionForm'
 import TButton from '../../components/TButton'
 import TimelineTab from './TimelineTab'
 import axios from 'axios'
-import {getCampReadiness} from '../../settings/URLS'
+import { getCampReadiness } from '../../settings/URLS'
 
 const Inspect = (props) => {
 
@@ -21,9 +22,9 @@ const Inspect = (props) => {
 
     const _fetchInspectionList = async () => {
         setLoading(true)
-        try{
+        try {
             const userInfo = await AsyncStorage.getItem('userInfo')
-            const {id} = JSON.parse(userInfo)
+            const { id } = JSON.parse(userInfo)
             console.log('url', `${INSPECTION_LIST_URL}/${id}`)
             const result = await axios.get(`${INSPECTION_LIST_URL}/${id}`)
             //const res = await fetch(URL)
@@ -31,7 +32,7 @@ const Inspect = (props) => {
             console.log(result.data.requirements)
             setInspectionList(result.data.requirements)
             setLoading(false)
-        }catch(e) {
+        } catch (e) {
             setLoading(false)
             console.log(e)
         }
@@ -40,7 +41,7 @@ const Inspect = (props) => {
     useEffect(() => {
         _fetchInspectionList()
     }, [])
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.headerView}>
@@ -72,9 +73,11 @@ const Inspect = (props) => {
                             <TButton title={ArText.saveBtn} />
                         </View> */}
                     </Tab>
-                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.accommodation}</Text></TabHeading>}>
+                    {/* <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
                         <TimelineTab />
-                    </Tab>
+                    </Tab> */}
+
+                    
 
                 </Tabs>
             </Container>

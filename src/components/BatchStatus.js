@@ -5,14 +5,14 @@ import { Colors } from '../utils/Colors'
 import { Container, Header, Content, Card, CardItem, Body } from 'native-base';
 
 const BatchStatus = (props) => {
-    const {batch} = props
+    const { batch } = props
 
     // const content = () => {
     //     return (
     //         <View style={[styles.container, styles.shadow]}>
     //         <Card height={40} marginBottom={7}>
 
-                {/* <View style={styles.infoContainer}>
+    {/* <View style={styles.infoContainer}>
 
                     <View style={styles.dotView}>
                         <View style={styles.dot}/>
@@ -36,16 +36,17 @@ const BatchStatus = (props) => {
     //     </View>
     //     )
     // }
-    console.log('---', batch)
-    return (
-        
-          <Card style={styles.container}>
+    // console.log('---', batch)
+
+    const _content = () => {
+        return (
+            <Card style={styles.container}>
             <CardItem>
-              {/* <Body> */}
+                {/* <Body> */}
                 <View style={styles.infoContainer}>
 
                     <View style={styles.dotView}>
-                        <View style={styles.dot}/>
+                        <View style={styles.dot} />
                     </View>
 
                     <View style={styles.batchNumView}>
@@ -53,8 +54,8 @@ const BatchStatus = (props) => {
                     </View>
 
                     <View style={styles.batchTimeView}>
-                        <Text style={styles.batchTime}>{batch.batch_times.length > 0 ?  
-                        `${batch.batch_times[0].dispatch_d_hour}:${batch.batch_times[0].dispatch_d_minute}` : '-'}</Text>
+                        <Text style={styles.batchTime}>{batch.batch_times.length > 0 ?
+                            `${batch.batch_times[0].dispatch_d_hour}:${batch.batch_times[0].dispatch_d_minute}` : '-'}</Text>
                     </View>
 
                     {/* <View style={styles.batchStatusView}>
@@ -62,9 +63,18 @@ const BatchStatus = (props) => {
                     </View> */}
 
                 </View>
-              {/* </Body> */}
+                {/* </Body> */}
             </CardItem>
-          </Card>
+        </Card>
+        )
+    }
+    return (
+
+        <>
+            {
+                batch.batch_times.length > 0 ? (_content()) : null
+            }
+        </>
     )
 }
 
@@ -75,7 +85,7 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flexDirection: 'row',
-        
+
     },
     dotView: {
         justifyContent: 'center',
@@ -93,7 +103,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     batchNum: {
-        
+
     },
     batchTimeView: {
         flex: 1,
@@ -116,11 +126,11 @@ const styles = StyleSheet.create({
         borderRadius: 2,
 
         shadowColor: '#d7d7d7',
-        shadowOffset: {height: .5, width: 2},
+        shadowOffset: { height: .5, width: 2 },
         shadowOpacity: .9,
         shadowRadius: 5,
 
-        marginBottom:10,
+        marginBottom: 10,
     }
 
 })

@@ -26,17 +26,51 @@ const Fouj = (props) => {
 
             const { batches, total, in_progress, not_yet } = result.data
 
+            const listDone = [
+                { title: 9, data: batches['9'] && [...batches['9']].filter(batch => batch.return_to_camp !== null) || [] },
+                { title: 10, data: batches['10'] && [...batches['10']].filter(batch => batch.return_to_camp !== null) || [] },
+                { title: 11, data: batches['11'] && [...batches['11']].filter(batch => batch.return_to_camp !== null) || [] },
+                { title: 12, data: batches['12'] && [...batches['12']].filter(batch => batch.return_to_camp !== null) || [] },
+                { title: 13, data: batches['13'] && [...batches['13']].filter(batch => batch.return_to_camp !== null) || [] },
+            ]
+
+            const listNotDone = [
+                {
+                    title: 9, data: batches['9'] && [...batches['9']].filter(batch=> batch.dispatching_time === null
+                        || (batch.dispatching_time !== null && batch.return_to_camp === null)) || []
+                },
+                {
+                    title: 10, data: batches['10'] && [...batches['10']].filter(batch=> batch.dispatching_time === null
+                        || (batch.dispatching_time !== null && batch.return_to_camp === null)) || []
+                },
+                {
+                    title: 11, data: batches['11'] && [...batches['11']].filter(batch=> batch.dispatching_time === null
+                        || (batch.dispatching_time !== null && batch.return_to_camp === null)) || []
+                },
+                {
+                    title: 12, data: batches['12'] && [...batches['12']].filter(batch=> batch.dispatching_time === null
+                        || (batch.dispatching_time !== null && batch.return_to_camp === null)) || []
+                },
+                {
+                    title: 13, data: batches['13'] && [...batches['13']].filter(batch=> batch.dispatching_time === null
+                        || (batch.dispatching_time !== null && batch.return_to_camp === null)) || []
+                },
+            ]
+
+            console.log('list done ', listDone)
             // console.log('------ result.data', result.data.batches)
-            const done = [...result.data.batches].filter(batch => batch.dispatching_time === null)
-            const notDone = [...result.data.batches].filter(batch => batch.journey_end !== null)
+            // const done = [...result.data.batches].filter(batch => batch.return_to_camp !== null)
+            // const notDone = [...result.data.batches].filter(batch => 
+            //     batch.dispatching_time === null 
+            //     || (batch.dispatching_time !== null && batch.return_to_camp === null) )
 
-            console.log('---done--- result.data', done)
-            console.log('---notDone--- result.data', notDone)
+            // console.log('---done--- result.data', done)
+            // console.log('---notDone--- result.data', notDone)
 
-            setDoneBatches(done)
-            setNotDoneBatches(notDone)
+            setDoneBatches(listDone)
+            setNotDoneBatches(listNotDone)
 
-            
+
             setLoading(false)
         } catch (e) {
             setLoading(false)
