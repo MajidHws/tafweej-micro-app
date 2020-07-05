@@ -9,6 +9,7 @@ export const register = `${BASE_URL}/auth/register`
 export const getGuides = `${BASE_URL}/auth/office-users`
 export const assignBatch = `${BASE_URL}/assign-batch`
 export const removeGuide = `${BASE_URL}/auth/delete-user`
+export const getGuideBatches = `${BASE_URL}/get-user-batches`
 
 // INSPECT
 export const getCampReadiness = `${BASE_URL}/get-tafweej-requirement`

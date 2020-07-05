@@ -73,9 +73,9 @@ const Inspect = (props) => {
                             <TButton title={ArText.saveBtn} />
                         </View> */}
                     </Tab>
-                    {/* <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
+                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
                         <TimelineTab />
-                    </Tab> */}
+                    </Tab>
 
                     
 

@@ -10,14 +10,14 @@ import { ArText } from '../../utils/ArText'
 
 const FoujList = (props) => {
 
-    const data = [1, 2, 3, 4, 5, 6]
+    const data = props.data
 
     return (
         <>
             <View style={styles.guidesListView}>
                 <Text style={styles.guidesListTitle}>{props.title || 'NONE'}</Text>
                 <TouchableOpacity>
-                    <Text style={styles.showAll}>{ArText.showAll}</Text>
+                    {/* <Text style={styles.showAll}>{ArText.showAll}</Text> */}
                 </TouchableOpacity>
             </View>
             <FlatList
@@ -26,7 +26,7 @@ const FoujList = (props) => {
                 contentContainerStyle={styles.flatListStyle}
                 data={data}
                 keyExtractor={(item, i) => String(item)}
-                renderItem={({ item }, i) => <FoujCard goToFoujDetails={props.goToFoujDetails} />}
+                renderItem={({ item }, i) => <FoujCard batch={item} goToFoujDetails={props.goToFoujDetails} />}
             />
         </>
     )

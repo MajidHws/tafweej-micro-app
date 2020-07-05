@@ -28,9 +28,9 @@ const Login = (props) => {
     const [password, setPassword] = useState('1122334455')
     const [checkingAuth, setCheckingAuth] = useState(true)
 
-    // AsyncStorage.removeItem('userInfo')
-    // AsyncStorage.removeItem('userType')
-    // AsyncStorage.removeItem('userToken')
+    AsyncStorage.removeItem('userInfo')
+    AsyncStorage.removeItem('userType')
+    AsyncStorage.removeItem('userToken')
 
     const toIntro = () => {
         // props.navigation.navigate('Intro')
@@ -138,12 +138,14 @@ const Login = (props) => {
                     <View style={styles.formView}>
                         <View style={styles.inputView}>
                             <TextInput
+                            onChangeText={(text) => setPersonalId(text)}
                                 value={personalId}
                                 placeholder={ArText.mobileNumber}
                                 style={styles.input} />
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
+                            onChangeText={(text) => setPassword(text)}
                                 value={password}
                                 placeholder={ArText.password}
                                 secureTextEntry

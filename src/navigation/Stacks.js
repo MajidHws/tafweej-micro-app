@@ -14,7 +14,7 @@ const LoginStack = createStackNavigator();
 
 const LoginStackScreen = () => {
 
-    let tabNav = Tabs
+    let tabNav = GuideTabs
 
     const [initialRoute, setInitialRoute] = useState('Tabs')
     const [checking, setChecking] = useState(false)
@@ -27,7 +27,7 @@ const LoginStackScreen = () => {
     }
 
     useEffect(() => {
-        _checkAuth()
+        // _checkAuth()
     }, [])
 
     const _content = async () => {
@@ -68,11 +68,12 @@ const LoginStackScreen = () => {
                             name="Login"
                             component={Login}
                             options={({ route }) => ({ headerShown: false })} />
+                        <LoginStack.Screen name="Trip" component={FoujTrip} options={({ route }) => ({ headerShown: false })} />
                         <LoginStack.Screen name="Intro" component={Intro} options={({ route }) => ({ headerShown: false })} />
                         <LoginStack.Screen name="Tabs" component={tabNav} options={({ route }) => ({ headerShown: false })} />
                     </LoginStack.Navigator>
                 ) : (
-                        <LoginStack.Navigator initialRouteName="Tabs">
+                        <LoginStack.Navigator>
                             <LoginStack.Screen
                                 name="Login"
                                 component={Login}

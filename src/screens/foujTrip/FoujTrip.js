@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
     View, Text, StyleSheet, ImageBackground, Dimensions,
-    FlatList
+    FlatList,
+    ActivityIndicator
 } from 'react-native'
 import img5 from '../../../assets/img/9.png'
 import { ArText } from '../../utils/ArText'
@@ -15,10 +16,53 @@ import TButton from '../../components/TButton'
 import Card from '../../components/Card'
 import GuideCard from '../../components/GuideCard'
 import TripCard from '../../components/TripCard'
+import Axios from 'axios'
 
 const FoujTrip = (props) => {
 
+    const { id, code } = props.route.params
+    // console.log('foujId', props.id, props.route.params.id)
+    const [trip, setTrip] = useState([])
+    const [tripList, setTripList] = useState([])
+    const [loading, setLoading] = useState(false)
 
+    const _fetchTrip = async () => {
+        setLoading(true)
+        try {
+
+            const result = await Axios.get(`http://dev.hajjtafweej.net/api/batche-details?id=${id}`)
+            const data = result.data
+            arrival_time: "12:47"
+            dispatching_time: "12:46"
+            first_jamarah: "12:47"
+            id: 3
+            // is_jamarat: null
+            journey_end: null
+            // office_id: 2
+            return_to_camp: null
+            secound_jamarah: "12:47"
+            third_jamrah: null
+
+            const list = [
+                { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
+                { name: 'arrival_time', time: data.arrival_time, title: 'وقت الوصول' },
+                { name: 'first_jamarah', time: data.first_jamarah, title: 'الرمية الاولى' },
+                { name: 'secound_jamarah', time: data.secound_jamarah, title: 'الرمية الثانية' },
+                { name: 'third_jamrah', time: data.third_jamrah, title: 'الرمية الثالثة' },
+                { name: 'journey_end', time: data.journey_end, title: 'نهاية الرحلة' },
+                { name: 'return_to_camp', time: data.return_to_camp, title: 'العودة الى المخيم' },
+            ]
+
+            setTrip(result.data)
+            setTripList(list)
+            console.log(result.data)
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+            console.log(e);
+
+        }
+    }
 
     const _guideStats = () => {
         return (
@@ -27,7 +71,7 @@ const FoujTrip = (props) => {
                 <View style={styles.statsContainer}>
 
                     <View style={styles.statsHeadingView}>
-                        <Text style={styles.statsHeading}>000</Text>
+                        <Text style={styles.statsHeading}>{code}</Text>
                     </View>
 
                     <View style={styles.statsView}>
@@ -52,7 +96,7 @@ const FoujTrip = (props) => {
         )
     }
 
-    const _content = () => {
+    const _content8 = () => {
         return (
             <View style={styles.container}>
                 <View style={styles.headerView}>
@@ -78,8 +122,13 @@ const FoujTrip = (props) => {
             </View>
         )
     }
-    return (
-        <View style={styles.container}>
+
+    useEffect(() => {
+        _fetchTrip()
+    }, [])
+
+    const _content = () => {
+        return (<View style={styles.container}>
             <View style={styles.headerView}>
                 <ImageBackground style={{ width: width, height: 200 }} resizeMode={'cover'} source={img5}>
                     <View style={styles.headingContainer}>
@@ -99,20 +148,28 @@ const FoujTrip = (props) => {
 
             {_guideStats()}
 
-            <View style={styles.contentView}>
-                <FlatList
-                    contentContainerStyle={styles.listStyle}
-                    keyExtractor={(item) => String(item)}
-                    data={[1, 3, 4, 5, 6, 7]}
-                    renderItem={({ item }) => <TripCard />}
-                />
-                <View style={styles.confirmTripView}>
-                    <TButton title={ArText.confirmTrip} action={() => alert('')} />
+            {loading ? <ActivityIndicator /> : (
+
+                <View style={styles.contentView}>
+                    <FlatList
+                        contentContainerStyle={styles.listStyle}
+                        keyExtractor={(item, i) => String(i)}
+                        data={tripList}
+                        renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
+                    />
+                    <View style={styles.confirmTripView}>
+                        <TButton title={ArText.confirmTrip} action={() => alert('')} />
+                    </View>
                 </View>
-            </View>
+            )}
 
 
-        </View>
+        </View>)
+    }
+    return (
+        <>
+            {_content()}
+        </>
     )
 }
 

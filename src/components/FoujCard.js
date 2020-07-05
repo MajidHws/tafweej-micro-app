@@ -5,22 +5,22 @@ import Card from './Card'
 import { ArText } from '../utils/ArText'
 
 const FoujCard = (props) => {
-    const {assignBatch, setAssignBatch, deleteGuide, setDeleteGuide, goToFoujDetails} = props
+    const {assignBatch, setAssignBatch, deleteGuide, setDeleteGuide, goToFoujDetails, batch} = props
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => goToFoujDetails()}>
+            <TouchableOpacity onPress={() => goToFoujDetails(batch.id, batch.batche_id)}>
 
             <Card height={60} style={styles.cardStyle}>
                 <View style={styles.content}>
-                    <Text style={styles.guideName}>Number</Text>
-                    <Text style={styles.foujNum}>time</Text>
+                    <Text style={styles.guideName}>{batch.batche_id}</Text>
+                    <Text style={styles.foujNum}>----</Text>
                 </View>
                 <View style={styles.actionView}>
                     <View onPress={() => setDeleteGuide(true)}>
                         
                     </View>
                     {/* <TouchableOpacity onPress={() => setAssignBatch(true)}> */}
-                        <Text style={styles.actionAssign}>{ArText.tafweejIsDone}</Text>
+                        <Text style={styles.actionAssign}>{'لم يتم التفويج'}</Text>
                     {/* </TouchableOpacity> */}
                 </View>
             </Card>

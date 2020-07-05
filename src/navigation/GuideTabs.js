@@ -38,18 +38,20 @@ const GuideTabs = (props) => {
 
     const foujStackComponent = () => {
         return (
-            <foujStack.Navigator>
-                <foujStack.Screen name="Fouj" component={GuideFouj} options={({ route }) => {
+            <Stack.Navigator>
+                <Stack.Screen name="Fouj" component={GuideFouj} options={({ route }) => {
                     return ({
                         headerShown: false,
                     })
                 }} />
-                <foujStack.Screen name="foujTrip" component={FoujTrip} options={({ route }) => {
+
+                {/* <Stack.Screen name="Trip" component={FoujTrip} options={({ route }) => {
                     return ({
                         headerShown: false,
                     })
-                }} />
-            </foujStack.Navigator>
+                }} /> */}
+                
+            </Stack.Navigator>
         )
     }
     return (
@@ -99,7 +101,7 @@ const GuideTabs = (props) => {
                     activeTintColor: Colors.primary
                 })
             }} />
-            <Tab.Screen name="profile" component={GuideProfile} options={({ route }) => {
+            {/* <Tab.Screen name="profile" component={GuideProfile} options={({ route }) => {
                 return ({
                     activeTintColor: '',
                     tabBarIcon: ({ color, focused }) => focused
@@ -109,7 +111,7 @@ const GuideTabs = (props) => {
                     gestureDirection: 'horizontal-inverted',
                     activeTintColor: Colors.primary
                 })
-            }} />
+            }} /> */}
 
 
 
