@@ -161,9 +161,9 @@ const Login = (props) => {
                             </View>)
                     }
 
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.forgetPasswordView}>
+                    {/* <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.forgetPasswordView}>
                         <Text style={styles.forgetPassword}>{ArText.forgetPassword}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                 </View>
 

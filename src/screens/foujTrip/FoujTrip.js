@@ -20,7 +20,9 @@ import Axios from 'axios'
 
 const FoujTrip = (props) => {
 
-    const { id, code } = props.route.params
+    // const { id, code } = props.route.params
+    const id = 1
+    const code = 'NAME'
     // console.log('foujId', props.id, props.route.params.id)
     const [trip, setTrip] = useState([])
     const [tripList, setTripList] = useState([])
@@ -32,16 +34,16 @@ const FoujTrip = (props) => {
 
             const result = await Axios.get(`http://dev.hajjtafweej.net/api/batche-details?id=${id}`)
             const data = result.data
-            arrival_time: "12:47"
-            dispatching_time: "12:46"
-            first_jamarah: "12:47"
-            id: 3
-            // is_jamarat: null
-            journey_end: null
-            // office_id: 2
-            return_to_camp: null
-            secound_jamarah: "12:47"
-            third_jamrah: null
+            // arrival_time: "12:47"
+            // dispatching_time: "12:46"
+            // first_jamarah: "12:47"
+            // id: 3
+            // // is_jamarat: null
+            // journey_end: null
+            // // office_id: 2
+            // return_to_camp: null
+            // secound_jamarah: "12:47"
+            // third_jamrah: null
 
             const list = [
                 { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
@@ -128,12 +130,13 @@ const FoujTrip = (props) => {
     }, [])
 
     const _content = () => {
-        return (<View style={styles.container}>
-            <View style={styles.headerView}>
+        return (
+            <View style={styles.container}>
+                {/* <View style={styles.headerView}>
                 <ImageBackground style={{ width: width, height: 200 }} resizeMode={'cover'} source={img5}>
                     <View style={styles.headingContainer}>
                         <View style={styles.headingIconView}>
-                            {/* <Text style={styles.heading}>{ArText.analytic}</Text> */}
+                            <Text style={styles.heading}>{ArText.analytic}</Text>
                             <TouchableOpacity onPress={() => props.navigation.goBack()}>
                                 <FontAwesome name="chevron-right" color="#fff" size={20} />
                             </TouchableOpacity>
@@ -144,27 +147,71 @@ const FoujTrip = (props) => {
 
                     </View>
                 </ImageBackground>
-            </View>
+            </View> */}
 
-            {_guideStats()}
+                {/* {_guideStats()} */}
 
-            {loading ? <ActivityIndicator /> : (
-
-                <View style={styles.contentView}>
-                    <FlatList
-                        contentContainerStyle={styles.listStyle}
-                        keyExtractor={(item, i) => String(i)}
-                        data={tripList}
-                        renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                    />
-                    <View style={styles.confirmTripView}>
-                        <TButton title={ArText.confirmTrip} action={() => alert('')} />
+                <View style={{ paddingRight: 20, marginTop: 20 }}>
+                    <View style={{
+                        backgroundColor: Colors.primary,
+                        padding: 5,
+                        borderTopRightRadius: 20,
+                        borderBottomRightRadius: 20
+                    }}>
+                        <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
                     </View>
                 </View>
-            )}
+
+                {loading ? (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator />
+                    </View>
+                ) : (
+
+                        <View style={styles.contentView}>
+                            <FlatList
+                                contentContainerStyle={styles.listStyle}
+                                keyExtractor={(item, i) => String(i)}
+                                data={tripList}
+                                renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
+                            />
+                            {/* <View style={styles.confirmTripView}>
+                                <TButton title={ArText.confirmTrip} action={() => alert('')} />
+                            </View> */}
+                        </View>
+                    )}
+                <View style={{ paddingRight: 20, marginTop: 20 }}>
+                    <View style={{
+                        backgroundColor: Colors.primary,
+                        padding: 5,
+                        borderTopRightRadius: 20,
+                        borderBottomRightRadius: 20
+                    }}>
+                        <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
+                    </View>
+                </View>
+
+                {loading ? (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator />
+                    </View>
+                ) : (
+
+                        <View style={styles.contentView}>
+                            <FlatList
+                                contentContainerStyle={styles.listStyle}
+                                keyExtractor={(item, i) => String(i)}
+                                data={tripList}
+                                renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
+                            />
+                            <View style={styles.confirmTripView}>
+                                <TButton title={ArText.confirmTrip} action={() => alert('')} />
+                            </View>
+                        </View>
+                    )}
 
 
-        </View>)
+            </View>)
     }
     return (
         <>
@@ -176,7 +223,8 @@ const FoujTrip = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+
     },
     headingContainer: {
         flexDirection: 'row',
@@ -377,7 +425,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 10
     },
     listStyle: {
-        //  flex: 1 
+        //  flex: 1 ,
+        paddingTop: 10
     },
     confirmTripView: {
         marginBottom: 20

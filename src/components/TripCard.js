@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, TouchableWithoutFeedback } from 'react-native'
 
 import { Colors } from '../utils/Colors'
 import { CheckBox } from 'native-base'
@@ -14,7 +14,7 @@ const TripCard = (props) => {
         try {
             setLoading(true)
             console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&col_name=${item.name}`);
-            
+
             const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&col_name=${item.name}`)
             setItem({
                 ...item,
@@ -29,17 +29,20 @@ const TripCard = (props) => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.contentView}>
-                <Text style={styles.contentText}>{item.title}</Text>
-                {
-                    loading ? (<ActivityIndicator />) : (
-                        <CheckBox color={Colors.primary}
-                            checked={item.time !== null}
-                            onPress={_updateTrip}
-                            style={{ justifyContent: 'center', alignItems: 'center' }} />
-                    )
-                }
-            </View>
+            <TouchableWithoutFeedback onPress={_updateTrip}>
+
+                <View style={styles.contentView}>
+                    <Text style={styles.contentText}>{item.title}</Text>
+                    {
+                        loading ? (<ActivityIndicator />) : (
+                            <CheckBox color={Colors.primary}
+                                checked={item.time !== null}
+                                onPress={_updateTrip}
+                                style={{ justifyContent: 'center', alignItems: 'center' }} />
+                        )
+                    }
+                </View>
+            </TouchableWithoutFeedback>
         </View>
     )
 }
@@ -54,7 +57,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        borderRadius: 10
         // alignItems: 'center'
     },
     textView: {

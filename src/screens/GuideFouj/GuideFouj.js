@@ -10,6 +10,7 @@ import FoujList from './FoujList'
 import Axios from 'axios'
 
 import { getGuideBatches } from '../../settings/URLS'
+import FoujTrip from '../foujTrip/FoujTrip'
 
 const GuideFouj = (props) => {
 
@@ -42,7 +43,7 @@ const GuideFouj = (props) => {
 
     const _goToFoujDetails = (id, code) => {
         // alert(id)
-        props.navigation.navigate('Trip', {id, code})
+        props.navigation.navigate('Trip', { id, code })
     }
 
     useEffect(() => {
@@ -53,13 +54,13 @@ const GuideFouj = (props) => {
         <View style={styles.container}>
 
             <View style={styles.headerView}>
-                <ImageBackground style={{ width: width, height: 300 }} resizeMode={'cover'} source={img5}>
+                <ImageBackground style={{ width: width, height: 180 }} resizeMode={'cover'} source={img5}>
                     <View style={styles.headingContainer}>
                         <View style={styles.headingView}>
                             <Text style={styles.heading}>{ArText.batches}</Text>
                         </View>
                         <View style={styles.headingBackBtnView}>
-                            <Text style={styles.estName}>ESTABLISHMENT</Text>
+                            {/* <Text style={styles.estName}>ESTABLISHMENT</Text> */}
                         </View>
                     </View>
                 </ImageBackground>
@@ -70,21 +71,28 @@ const GuideFouj = (props) => {
             }}>
                 <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
 
-                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.foujNotOutYet}</Text></TabHeading>}>
-                        <FoujList
+                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'الجدول'}</Text></TabHeading>}>
+                        {/* <FoujList
                             navigation={props.navigation}
                             goToFoujDetails={_goToFoujDetails}
                             data={notDoneBatches}
-                            title={ArText.foujNotOutYet} />
+                            title={ArText.foujNotOutYet} /> */}
+
+                        {/* <View style={{paddingRight: 20, marginTop: 20}}>
+                            <View style={{
+                                backgroundColor: Colors.primary,
+                                padding: 5,
+                                borderTopRightRadius: 20,
+                                borderBottomRightRadius: 20
+                            }}>
+                                <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
+                            </View>
+                        </View> */}
+
                     </Tab>
-                    
-                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.foujDone}</Text></TabHeading>}>
-                        <FoujList
-                            navigation={props.navigation}
-                            goToFoujDetails={_goToFoujDetails}
-                            data={doneBatches}
-                            title={ArText.remainingBatches}
-                            horizontal={false} />
+
+                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
+                        <FoujTrip />
                     </Tab>
 
                 </Tabs>

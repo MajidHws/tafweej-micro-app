@@ -55,7 +55,7 @@ const Intro = (props) => {
     const _goToHome = () => {
         // props.navigation.navigate('Tabs')
         props.navigation.dispatch(
-            StackActions.replace('Tabs')
+            StackActions.replace('guideFouj')
         );
     }
 
