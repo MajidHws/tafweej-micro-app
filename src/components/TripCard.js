@@ -49,7 +49,8 @@ const TripCard = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        marginHorizontal: 10
     },
     contentView: {
         backgroundColor: Colors.notificationCardBg,

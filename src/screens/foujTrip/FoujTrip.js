@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
     View, Text, StyleSheet, ImageBackground, Dimensions,
-    FlatList,
+    FlatList, SectionList,
     ActivityIndicator
 } from 'react-native'
 import img5 from '../../../assets/img/9.png'
@@ -26,6 +26,7 @@ const FoujTrip = (props) => {
     // console.log('foujId', props.id, props.route.params.id)
     const [trip, setTrip] = useState([])
     const [tripList, setTripList] = useState([])
+    const [sectionList, setSectionList] = useState([])
     const [loading, setLoading] = useState(false)
 
     const _fetchTrip = async () => {
@@ -57,6 +58,16 @@ const FoujTrip = (props) => {
 
             setTrip(result.data)
             setTripList(list)
+            
+            setSectionList([
+                { title: 'الجدول', data: tripList },
+                { title: 'الجدول', data: tripList },
+                { title: 'الجدول', data: tripList },
+                { title: 'الجدول', data: tripList },
+                { title: 'الجدول', data: tripList },
+                { title: 'الجدول', data: tripList }
+            ])
+
             console.log(result.data)
             setLoading(false)
         } catch (e) {
@@ -129,38 +140,26 @@ const FoujTrip = (props) => {
         _fetchTrip()
     }, [])
 
+    const _listHeader = (header) => {
+        return (
+            <View style={{ paddingRight: 0,  }}>
+                {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
+                <View style={{
+                    backgroundColor: Colors.primary,
+                    padding: 5,
+                    // borderTopRightRadius: 20,
+                    // borderBottomRightRadius: 20
+                }}>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
+                </View>
+            </View>
+        )
+    }
     const _content = () => {
         return (
             <View style={styles.container}>
-                {/* <View style={styles.headerView}>
-                <ImageBackground style={{ width: width, height: 200 }} resizeMode={'cover'} source={img5}>
-                    <View style={styles.headingContainer}>
-                        <View style={styles.headingIconView}>
-                            <Text style={styles.heading}>{ArText.analytic}</Text>
-                            <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                                <FontAwesome name="chevron-right" color="#fff" size={20} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.headingTitleView}>
-                            <Text style={styles.heading}>{ArText.batches}</Text>
-                        </View>
+                
 
-                    </View>
-                </ImageBackground>
-            </View> */}
-
-                {/* {_guideStats()} */}
-
-                <View style={{ paddingRight: 20, marginTop: 20 }}>
-                    <View style={{
-                        backgroundColor: Colors.primary,
-                        padding: 5,
-                        borderTopRightRadius: 20,
-                        borderBottomRightRadius: 20
-                    }}>
-                        <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
-                    </View>
-                </View>
 
                 {loading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -169,46 +168,29 @@ const FoujTrip = (props) => {
                 ) : (
 
                         <View style={styles.contentView}>
-                            <FlatList
+
+                            <SectionList
+                                contentContainerStyle={styles.listStyle}
+                                keyExtractor={(item, i) => String(i)}
+                                sections={sectionList}
+                                renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
+                                renderSectionHeader={({ section }) => _listHeader(section.title)}
+                            />
+                            {/* <FlatList
                                 contentContainerStyle={styles.listStyle}
                                 keyExtractor={(item, i) => String(i)}
                                 data={tripList}
                                 renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                            />
+                            /> */}
                             {/* <View style={styles.confirmTripView}>
                                 <TButton title={ArText.confirmTrip} action={() => alert('')} />
                             </View> */}
                         </View>
                     )}
-                <View style={{ paddingRight: 20, marginTop: 20 }}>
-                    <View style={{
-                        backgroundColor: Colors.primary,
-                        padding: 5,
-                        borderTopRightRadius: 20,
-                        borderBottomRightRadius: 20
-                    }}>
-                        <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
-                    </View>
-                </View>
 
-                {loading ? (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator />
-                    </View>
-                ) : (
 
-                        <View style={styles.contentView}>
-                            <FlatList
-                                contentContainerStyle={styles.listStyle}
-                                keyExtractor={(item, i) => String(i)}
-                                data={tripList}
-                                renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                            />
-                            <View style={styles.confirmTripView}>
-                                <TButton title={ArText.confirmTrip} action={() => alert('')} />
-                            </View>
-                        </View>
-                    )}
+
+
 
 
             </View>)
@@ -422,11 +404,11 @@ const styles = StyleSheet.create({
     },
     contentView: {
         flex: 1,
-        marginHorizontal: 10
+        // marginHorizontal: 10
     },
     listStyle: {
         //  flex: 1 ,
-        paddingTop: 10
+        // paddingTop: 10
     },
     confirmTripView: {
         marginBottom: 20
