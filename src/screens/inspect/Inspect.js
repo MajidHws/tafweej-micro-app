@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground, Dimensions, 
-    FlatList, AsyncStorage, ActivityIndicator, Button } from 'react-native'
+import {
+    View, Text, StyleSheet, ImageBackground, Dimensions,
+    FlatList, AsyncStorage, ActivityIndicator, Button
+} from 'react-native'
 import img5 from '../../../assets/img/7.png'
 import { ArText } from '../../utils/ArText'
 const { height, width } = Dimensions.get('screen')
@@ -25,12 +27,11 @@ const Inspect = (props) => {
         try {
             const userInfo = await AsyncStorage.getItem('userInfo')
             const { id } = JSON.parse(userInfo)
-            console.log('url', `${INSPECTION_LIST_URL}/${id}`)
-            const result = await axios.get(`${INSPECTION_LIST_URL}/${id}`)
-            //const res = await fetch(URL)
-            //const result = await res.json()
-            console.log(result.data.requirements)
-            setInspectionList(result.data.requirements)
+            // console.log(`${'http://tafweej-app.hajjtafweej.net/api/schedule/1'}/${id}`)
+            // const result = await axios.get(`${'http://tafweej-app.hajjtafweej.net/api/schedule'}/${1}`)
+            // //const res = await fetch(URL)
+            // //const result = await res.json()
+            // console.log(result.data)
             setLoading(false)
         } catch (e) {
             setLoading(false)
@@ -62,12 +63,18 @@ const Inspect = (props) => {
                 <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
 
                     <Tab heading={<TabHeading><Text style={styles.tabTitle}>{ArText.readiness}</Text></TabHeading>}>
-                        {loading ? (<ActivityIndicator />) : (<FlatList
-                            contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }}
-                            keyExtractor={(item, i) => String(i)}
-                            data={inspectionList}
-                            renderItem={({ item }) => <InspectionForm item={item} />}
-                        />)}
+                        {loading ? (
+                            <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                                <ActivityIndicator />
+                            </View>
+                        ) : (
+                                <FlatList
+                                    contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }}
+                                    keyExtractor={(item, i) => String(i)}
+                                    data={inspectionList}
+                                    renderItem={({ item }) => <InspectionForm item={item} />}
+                                />
+                            )}
 
                         {/* <View style={styles.saveBtnView}>
                             <TButton title={ArText.saveBtn} />
@@ -77,7 +84,7 @@ const Inspect = (props) => {
                         <TimelineTab />
                     </Tab>
 
-                    
+
 
                 </Tabs>
             </Container>

@@ -17,11 +17,13 @@ import Card from '../../components/Card'
 import GuideCard from '../../components/GuideCard'
 import TripCard from '../../components/TripCard'
 import Axios from 'axios'
+import Accordion from 'react-native-collapsible/Accordion';
+
 
 const FoujTrip = (props) => {
 
     // const { id, code } = props.route.params
-    const id = 1
+    const id = props.id
     const code = 'NAME'
     // console.log('foujId', props.id, props.route.params.id)
     const [trip, setTrip] = useState([])
@@ -29,12 +31,53 @@ const FoujTrip = (props) => {
     const [sectionList, setSectionList] = useState([])
     const [loading, setLoading] = useState(false)
 
+    const [activeSections, setActiveSections] = useState([])
+    const [sections, setSections] = useState([])
+
+    const SECTIONS = [
+        {
+            title: 'First',
+            content: 'Lorem ipsum...',
+        },
+        {
+            title: 'Second',
+            content: 'Lorem ipsum...',
+        },
+    ];
+    const _renderSectionTitle = section => {
+        return (
+            <View style={styles.content}>
+                <Text style={{color: '#000', margin: 10}}>{section.content}</Text>
+            </View>
+        );
+    };
+
+    const _renderHeader = section => {
+        return (
+            <>
+                {_listHeader('section.title')}
+            </>
+        );
+    };
+
+    const _renderContent = section => {
+        return (
+            <View style={styles.content}>
+                <Text>{section.content}</Text>
+            </View>
+        );
+    };
+
+    const _updateSections = activeSections => {
+        setActiveSections(activeSections);
+    };
+
     const _fetchTrip = async () => {
         setLoading(true)
         try {
 
-            const result = await Axios.get(`http://dev.hajjtafweej.net/api/batche-details?id=${id}`)
-            const data = result.data
+            const result = await Axios.get(`http://tafweej-app.hajjtafweej.net/api/batch-Following-up/${id}`)
+            // const data = result.data
             // arrival_time: "12:47"
             // dispatching_time: "12:46"
             // first_jamarah: "12:47"
@@ -46,29 +89,31 @@ const FoujTrip = (props) => {
             // secound_jamarah: "12:47"
             // third_jamrah: null
 
-            const list = [
-                { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
-                { name: 'arrival_time', time: data.arrival_time, title: 'وقت الوصول' },
-                { name: 'first_jamarah', time: data.first_jamarah, title: 'الرمية الاولى' },
-                { name: 'secound_jamarah', time: data.secound_jamarah, title: 'الرمية الثانية' },
-                { name: 'third_jamrah', time: data.third_jamrah, title: 'الرمية الثالثة' },
-                { name: 'journey_end', time: data.journey_end, title: 'نهاية الرحلة' },
-                { name: 'return_to_camp', time: data.return_to_camp, title: 'العودة الى المخيم' },
-            ]
+            // const list = [
+            //     { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
+            //     { name: 'arrival_time', time: data.arrival_time, title: 'وقت الوصول' },
+            //     { name: 'first_jamarah', time: data.first_jamarah, title: 'الرمية الاولى' },
+            //     { name: 'secound_jamarah', time: data.secound_jamarah, title: 'الرمية الثانية' },
+            //     { name: 'third_jamrah', time: data.third_jamrah, title: 'الرمية الثالثة' },
+            //     { name: 'journey_end', time: data.journey_end, title: 'نهاية الرحلة' },
+            //     { name: 'return_to_camp', time: data.return_to_camp, title: 'العودة الى المخيم' },
+            // ]
 
-            setTrip(result.data)
-            setTripList(list)
             
-            setSectionList([
-                { title: 'الجدول', data: tripList },
-                { title: 'الجدول', data: tripList },
-                { title: 'الجدول', data: tripList },
-                { title: 'الجدول', data: tripList },
-                { title: 'الجدول', data: tripList },
-                { title: 'الجدول', data: tripList }
-            ])
 
-            console.log(result.data)
+            
+
+            console.log(result.data.batch_following_up)
+            const cleanedData = result.data.batch_following_up.map(b => ({title: b.operation.name, data: []}))
+            console.log('cleanedData', cleanedData)
+            
+            // setSectionList([
+            //     { title: 'الجدول', data: tripList },
+            //     { title: 'الجدول', data: tripList },
+            //     { title: 'الجدول', data: tripList }
+            // ])
+            setSectionList(cleanedData)
+
             setLoading(false)
         } catch (e) {
             setLoading(false)
@@ -142,7 +187,7 @@ const FoujTrip = (props) => {
 
     const _listHeader = (header) => {
         return (
-            <View style={{ paddingRight: 0,  }}>
+            <View style={{ paddingRight: 0, }}>
                 {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
                 <View style={{
                     backgroundColor: Colors.primary,
@@ -150,7 +195,7 @@ const FoujTrip = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{header}</Text>
                 </View>
             </View>
         )
@@ -158,7 +203,7 @@ const FoujTrip = (props) => {
     const _content = () => {
         return (
             <View style={styles.container}>
-                
+
 
 
                 {loading ? (
@@ -169,6 +214,15 @@ const FoujTrip = (props) => {
 
                         <View style={styles.contentView}>
 
+                            {/* <Accordion
+                                sections={SECTIONS}
+                                activeSections={activeSections}
+                                renderSectionTitle={_renderSectionTitle}
+                                renderHeader={_renderHeader}
+                                renderContent={_renderContent}
+                                onChange={_updateSections}
+                            /> */}
+
                             <SectionList
                                 contentContainerStyle={styles.listStyle}
                                 keyExtractor={(item, i) => String(i)}
@@ -176,6 +230,7 @@ const FoujTrip = (props) => {
                                 renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
                                 renderSectionHeader={({ section }) => _listHeader(section.title)}
                             />
+
                             {/* <FlatList
                                 contentContainerStyle={styles.listStyle}
                                 keyExtractor={(item, i) => String(i)}

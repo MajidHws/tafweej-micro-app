@@ -16,15 +16,16 @@ const GuideFouj = (props) => {
 
     const [doneBatches, setDoneBatches] = useState([])
     const [notDoneBatches, setNotDoneBatches] = useState([])
+    const [id, setId] = useState(null)
 
     const _fetchBatches = async () => {
         try {
 
             const userInfo = await AsyncStorage.getItem('userInfo')
             const { id } = JSON.parse(userInfo)
-            const result = await Axios.get(`${getGuideBatches}/${id}`)
-            const batches = result.data.user_batches
-
+            const result = await Axios.get(`${'http://tafweej-app.hajjtafweej.net/api/schedule'}/${id}`)
+            const data = result.data
+            setId(id)
             // batch.return_to_camp !== null
             // batch.dispatching_time === null
             //             || (batch.dispatching_time !== null && batch.return_to_camp === null)
@@ -32,10 +33,9 @@ const GuideFouj = (props) => {
             const notDone = []
             const done = []
 
-            setNotDoneBatches(batches)
-            setDoneBatches(batches)
+           
 
-            console.log(batches)
+            console.log(data)
         } catch (e) {
             console.log(e)
         }
@@ -92,7 +92,7 @@ const GuideFouj = (props) => {
                     </Tab>
 
                     <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
-                        <FoujTrip />
+                        <FoujTrip id={id} />
                     </Tab>
 
                 </Tabs>

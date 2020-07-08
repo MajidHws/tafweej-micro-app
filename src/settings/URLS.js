@@ -1,4 +1,5 @@
-const ROW_BASE_URL = 'http://dev.hajjtafweej.net'
+const ROW_BASE_URL = 'http://tafweej-app.hajjtafweej.net'
+// const ROW_BASE_URL = 'http://dev.hajjtafweej.net'
 const BASE_URL = `${ROW_BASE_URL}/api`
 
 // ANALYtiCS

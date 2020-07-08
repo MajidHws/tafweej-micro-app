@@ -24,7 +24,7 @@ const Login = (props) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [signing, setSigning] = useState(false)
 
-    const [personalId, setPersonalId] = useState('1111111111')
+    const [personalId, setPersonalId] = useState('1')
     const [password, setPassword] = useState('1122334455')
     const [checkingAuth, setCheckingAuth] = useState(true)
 
@@ -47,6 +47,7 @@ const Login = (props) => {
                 'Content-Type': 'application/json',
             }
 
+            // const result = await axios.post(`http://tafweej-app.hajjtafweej.net/api/auth/login?personal_id=${personalId}&password=${password}`, {}, { headers })
             const result = await axios.post(`${LOGIN_URL}?personal_id=${personalId}&password=${password}`, {}, { headers })
             // console.log(result.data)
             const userToken = result.data.access_token
@@ -61,19 +62,15 @@ const Login = (props) => {
                 const result = await axios.get(`${ME_URL}`, { headers })
                 console.log('----', result.data);
 
-                if (result.data.user_type.id) {
 
                     const userInfo = JSON.stringify(result.data)
-                    
+
                     AsyncStorage.setItem('userInfo', userInfo)
-                    AsyncStorage.setItem('userType', String(result.data.user_type.id))
                     AsyncStorage.setItem('userToken', userToken)
 
                     toIntro()
                     //setSigning(false)
                     return
-                }
-                setSigning(false)
             }
         } catch (e) {
             setSigning(false)
@@ -138,14 +135,14 @@ const Login = (props) => {
                     <View style={styles.formView}>
                         <View style={styles.inputView}>
                             <TextInput
-                            onChangeText={(text) => setPersonalId(text)}
+                                onChangeText={(text) => setPersonalId(text)}
                                 value={personalId}
                                 placeholder={ArText.mobileNumber}
                                 style={styles.input} />
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                            onChangeText={(text) => setPassword(text)}
+                                onChangeText={(text) => setPassword(text)}
                                 value={password}
                                 placeholder={ArText.password}
                                 secureTextEntry
@@ -155,7 +152,11 @@ const Login = (props) => {
 
                     {
                         signing
-                            ? (<ActivityIndicator />)
+                            ? (
+                                <View style={{paddingVertical: 15}}>
+                                    <ActivityIndicator />
+                                </View>
+                            )
                             : (<View style={styles.loginBtnView}>
                                 <TButton title={ArText.login} action={() => _login()} />
                             </View>)
