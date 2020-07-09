@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, TouchableWithoutFeedback, Alert } from 'react-native'
 
 import { Colors } from '../utils/Colors'
 import { CheckBox } from 'native-base'
@@ -11,6 +11,10 @@ const TripCard = (props) => {
     const [item, setItem] = useState(props.item)
     const [loading, setLoading] = useState(false)
     const _updateTrip = async () => {
+
+        if(showTime) return
+        // if(item.time === true) return Alert.alert('تنيه', 'لا يمكن تحديث الوقت مرتين')
+
         try {
             setLoading(true)
             // console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${item.id}&${item.name}=${new Date().getTime()}`);
@@ -36,7 +40,7 @@ const TripCard = (props) => {
             <TouchableWithoutFeedback onPress={_updateTrip}>
 
                 <View style={styles.contentView}>
-                    <Text style={styles.contentText}>{item.from} - {item.title}</Text>
+                    <Text style={styles.contentText}>{item.title}</Text>
                     {
                         showTime
                             ? (

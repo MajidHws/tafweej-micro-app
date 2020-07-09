@@ -38,7 +38,10 @@ const GuideFouj = (props) => {
 
             const cleanedData = data.schedule.map(b => {
 
+                console.log('b.direction = `${b.dispatch_location.name} إالى ${b.arrival_location.name}`', b.direction = `${b.dispatch_location.name} إالى ${b.arrival_location.name}`);
+                
                 const child = {
+                    direction: `${b.dispatch_location.name} إالى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
                         { id: b.id, name: 'dispatch_time', time: b.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
                         { id: b.id, name: 'arrival_time', time: b.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
@@ -69,7 +72,7 @@ const GuideFouj = (props) => {
 
             }
             setSchedule(cleanedData)
-            console.log(cleanedData);
+            console.log('direction', cleanedData);
 
 
 
@@ -90,7 +93,7 @@ const GuideFouj = (props) => {
         _fetchBatches()
     }, [])
 
-    const _listHeader = (header) => {
+    const _listHeader = (header, direction) => {
         return (
             <View style={{ paddingRight: 0, }}>
                 {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
@@ -100,7 +103,7 @@ const GuideFouj = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{header}</Text>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{direction} - {header}</Text>
                 </View>
             </View>
         )
@@ -164,7 +167,7 @@ const GuideFouj = (props) => {
                             keyExtractor={(item, i) => String(i)}
                             sections={schedule}
                             renderItem={({ item }, i) => <TripCard showTime={true} item={item} key={i} />}
-                            renderSectionHeader={({ section }) => _listHeader(section.title)}
+                            renderSectionHeader={({ section }) => _listHeader(section.title, section.direction)}
                         />
 
                     </Tab>

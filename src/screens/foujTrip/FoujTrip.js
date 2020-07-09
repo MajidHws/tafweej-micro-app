@@ -106,9 +106,12 @@ const FoujTrip = (props) => {
             console.log('result.data.batch_following_up', result.data.batch_following_up)
             const cleanedData = result.data.batch_following_up.map(b => {
 
+                b.direction = '-'
+
                 const child = {
+                    direction: `${b.dispatch_location.name} إالى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
-                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name},
                         { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
                         // { id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
                     ]
@@ -209,7 +212,7 @@ const FoujTrip = (props) => {
         _fetchTrip()
     }, [])
 
-    const _listHeader = (header) => {
+    const _listHeader = (header, direction) => {
         return (
             <View style={{ paddingRight: 0, }}>
                 {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
@@ -219,7 +222,7 @@ const FoujTrip = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{header}</Text>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{direction} - {header}</Text>
                 </View>
             </View>
         )
@@ -252,7 +255,7 @@ const FoujTrip = (props) => {
                                 keyExtractor={(item, i) => String(i)}
                                 sections={sectionList}
                                 renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                                renderSectionHeader={({ section }) => _listHeader(section.title)}
+                                renderSectionHeader={({ section }) => _listHeader(section.title, section.direction)}
                             />
 
                             {/* <FlatList
