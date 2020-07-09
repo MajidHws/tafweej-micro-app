@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ImageBackground, Dimensions, AsyncStorage } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, Dimensions, AsyncStorage, ActivityIndicator, SectionList } from 'react-native'
 import img5 from '../../../assets/img/7.png'
 import { ArText } from '../../utils/ArText'
 const { height, width } = Dimensions.get('screen')
@@ -8,6 +8,7 @@ import { Colors } from '../../utils/Colors';
 import { FontAwesome5 } from '@expo/vector-icons'
 import FoujList from './FoujList'
 import Axios from 'axios'
+import TripCard from '../../components/TripCard'
 
 import { getGuideBatches } from '../../settings/URLS'
 import FoujTrip from '../foujTrip/FoujTrip'
@@ -16,6 +17,8 @@ const GuideFouj = (props) => {
 
     const [doneBatches, setDoneBatches] = useState([])
     const [notDoneBatches, setNotDoneBatches] = useState([])
+    const [schedule, setSchedule] = useState(null)
+    const [program, setProgram] = useState(null)
     const [id, setId] = useState(null)
 
     const _fetchBatches = async () => {
@@ -26,16 +29,53 @@ const GuideFouj = (props) => {
             const result = await Axios.get(`${'http://tafweej-app.hajjtafweej.net/api/schedule'}/${id}`)
             const data = result.data
             setId(id)
+
             // batch.return_to_camp !== null
             // batch.dispatching_time === null
             //             || (batch.dispatching_time !== null && batch.return_to_camp === null)
 
+            
+
+            const cleanedData = data.schedule.map(b => {
+
+                const child = {
+                    title: b.operation.name, data: [
+                        { id: b.id, name: 'dispatch_time', time: b.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.id, name: 'arrival_time', time: b.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        // { id: b.dispatch_time, name: 'is_jamarat', time: b.is_jamarat, title: 'الرمية' }
+                    ]
+                }
+
+                if (b.is_jamarat) {
+                    child.data.push(
+                        { id: b.id, name: 'back_to_tower_time', time: b.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.id, name: 'arrival_to_tower_time', time: b.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                    )
+                }
+
+                if (b.assembly_time !== null) {
+                    child.data.push(
+                        { id: b.id, name: 'assembly_time', time: b.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                    )
+                }
+
+                return child
+            })
+            if(data.schedule.length > 0) {
+
+                setProgram(data.schedule[0].program)
+            }else {
+                setProgram({})
+
+            }
+            setSchedule(cleanedData)
+            console.log(cleanedData);
+
+
+
             const notDone = []
             const done = []
 
-           
-
-            console.log(data)
         } catch (e) {
             console.log(e)
         }
@@ -50,6 +90,22 @@ const GuideFouj = (props) => {
         _fetchBatches()
     }, [])
 
+    const _listHeader = (header) => {
+        return (
+            <View style={{ paddingRight: 0, }}>
+                {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
+                <View style={{
+                    backgroundColor: Colors.primary,
+                    padding: 5,
+                    // borderTopRightRadius: 20,
+                    // borderBottomRightRadius: 20
+                }}>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{header}</Text>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
 
@@ -57,7 +113,21 @@ const GuideFouj = (props) => {
                 <ImageBackground style={{ width: width, height: 180 }} resizeMode={'cover'} source={img5}>
                     <View style={styles.headingContainer}>
                         <View style={styles.headingView}>
-                            <Text style={styles.heading}>{ArText.batches}</Text>
+                            {
+                                program !== null ? (
+                                    <View style={{
+                                        backgroundColor: program.color,
+                                        padding: 10,
+                                        height: 40,
+                                        width: 40,
+                                        borderRadius: 20,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={styles.heading}>{schedule !== null ? program.name : ''}</Text>
+                                    </View>
+                                ) : (<ActivityIndicator />)
+                            }
                         </View>
                         <View style={styles.headingBackBtnView}>
                             {/* <Text style={styles.estName}>ESTABLISHMENT</Text> */}
@@ -88,6 +158,14 @@ const GuideFouj = (props) => {
                                 <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{'الجدول'}</Text>
                             </View>
                         </View> */}
+
+                        <SectionList
+                            contentContainerStyle={styles.listStyle}
+                            keyExtractor={(item, i) => String(i)}
+                            sections={schedule}
+                            renderItem={({ item }, i) => <TripCard showTime={true} item={item} key={i} />}
+                            renderSectionHeader={({ section }) => _listHeader(section.title)}
+                        />
 
                     </Tab>
 

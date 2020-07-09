@@ -47,7 +47,7 @@ const FoujTrip = (props) => {
     const _renderSectionTitle = section => {
         return (
             <View style={styles.content}>
-                <Text style={{color: '#000', margin: 10}}>{section.content}</Text>
+                <Text style={{ color: '#000', margin: 10 }}>{section.content}</Text>
             </View>
         );
     };
@@ -90,23 +90,47 @@ const FoujTrip = (props) => {
             // third_jamrah: null
 
             // const list = [
-            //     { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
-            //     { name: 'arrival_time', time: data.arrival_time, title: 'وقت الوصول' },
-            //     { name: 'first_jamarah', time: data.first_jamarah, title: 'الرمية الاولى' },
-            //     { name: 'secound_jamarah', time: data.secound_jamarah, title: 'الرمية الثانية' },
-            //     { name: 'third_jamrah', time: data.third_jamrah, title: 'الرمية الثالثة' },
-            //     { name: 'journey_end', time: data.journey_end, title: 'نهاية الرحلة' },
-            //     { name: 'return_to_camp', time: data.return_to_camp, title: 'العودة الى المخيم' },
+            // { name: 'dispatching_time', time: data.dispatching_time, title: 'وقت الخروج' },
+            // { name: 'arrival_time', time: data.arrival_time, title: 'وقت الوصول' },
+            // { name: 'first_jamarah', time: data.first_jamarah, title: 'الرمية الاولى' },
+            // { name: 'secound_jamarah', time: data.secound_jamarah, title: 'الرمية الثانية' },
+            // { name: 'third_jamrah', time: data.third_jamrah, title: 'الرمية الثالثة' },
+            // { name: 'journey_end', time: data.journey_end, title: 'نهاية الرحلة' },
+            // { name: 'return_to_camp', time: data.return_to_camp, title: 'العودة الى المخيم' },
             // ]
 
-            
 
-            
 
-            console.log(result.data.batch_following_up)
-            const cleanedData = result.data.batch_following_up.map(b => ({title: b.operation.name, data: []}))
+
+
+            console.log('result.data.batch_following_up', result.data.batch_following_up)
+            const cleanedData = result.data.batch_following_up.map(b => {
+
+                const child = {
+                    title: b.operation.name, data: [
+                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        // { id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
+                    ]
+                }
+
+                if (b.batch_follow_up.is_jamarat) {
+                    child.data.push(
+                        { id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                    )
+                }
+
+                if (b.assembly_time !== null) {
+                    child.data.push(
+                        { id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                    )
+                }
+
+                return child
+            })
             console.log('cleanedData', cleanedData)
-            
+
             // setSectionList([
             //     { title: 'الجدول', data: tripList },
             //     { title: 'الجدول', data: tripList },

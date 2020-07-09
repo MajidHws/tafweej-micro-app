@@ -6,20 +6,24 @@ import { CheckBox } from 'native-base'
 import Axios from 'axios'
 
 const TripCard = (props) => {
-    const { trip } = props
+    const { showTime } = props
 
     const [item, setItem] = useState(props.item)
     const [loading, setLoading] = useState(false)
     const _updateTrip = async () => {
         try {
             setLoading(true)
-            console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&col_name=${item.name}`);
+            // console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${item.id}&${item.name}=${new Date().getTime()}`);
+            console.log(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`);
 
-            const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&col_name=${item.name}`)
-            setItem({
+            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`)
+            // const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&${item.name}=${new Date().getTime()}`)
+
+            setItem(() => ({
                 ...item,
                 time: true
-            })
+            }))
+
             setLoading(false)
         } catch (e) {
             setLoading(false)
@@ -32,15 +36,25 @@ const TripCard = (props) => {
             <TouchableWithoutFeedback onPress={_updateTrip}>
 
                 <View style={styles.contentView}>
-                    <Text style={styles.contentText}>{item.title}</Text>
+                    <Text style={styles.contentText}>{item.from} - {item.title}</Text>
                     {
-                        loading ? (<ActivityIndicator />) : (
-                            <CheckBox color={Colors.primary}
-                                checked={item.time !== null}
-                                onPress={_updateTrip}
-                                style={{ justifyContent: 'center', alignItems: 'center' }} />
-                        )
+                        showTime
+                            ? (
+                                <Text style={{
+                                    color: Colors.secondary,
+                                    fontWeight: 'bold'
+                                }}>{item.time}</Text>
+                            )
+                            : (
+                                loading ? (<ActivityIndicator />) : (
+                                    <CheckBox color={Colors.primary}
+                                        checked={item.time !== null}
+                                        onPress={_updateTrip}
+                                        style={{ justifyContent: 'center', alignItems: 'center' }} />
+                                )
+                            )
                     }
+
                 </View>
             </TouchableWithoutFeedback>
         </View>
@@ -50,7 +64,7 @@ const TripCard = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 10
+        // marginHorizontal: 10
     },
     contentView: {
         backgroundColor: Colors.notificationCardBg,
@@ -59,7 +73,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderRadius: 10
+        // borderRadius: 10
         // alignItems: 'center'
     },
     textView: {
