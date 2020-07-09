@@ -12,15 +12,20 @@ const TripCard = (props) => {
     const [loading, setLoading] = useState(false)
     const _updateTrip = async () => {
 
-        if(showTime) return
+        if (showTime) return
         // if(item.time === true) return Alert.alert('تنيه', 'لا يمكن تحديث الوقت مرتين')
 
         try {
             setLoading(true)
+
+            var d = new Date();
+            var h = d.getHours();
+            var m = d.getMinutes();
+
             // console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${item.id}&${item.name}=${new Date().getTime()}`);
             console.log(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`);
 
-            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`)
+            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${h + ':' + m}`)
             // const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&${item.name}=${new Date().getTime()}`)
 
             setItem(() => ({
