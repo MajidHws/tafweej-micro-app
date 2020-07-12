@@ -109,12 +109,18 @@ const FoujTrip = (props) => {
                 b.direction = '-'
 
                 const child = {
-                    direction: `${b.dispatch_location.name} إالى ${b.arrival_location.name}`,
+                    direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
                         { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name},
                         { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
                         // { id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
                     ]
+                }
+
+                if (b.batch_follow_up.has_assembly) {
+                    child.data.push(
+                        { id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                    )
                 }
 
                 if (b.batch_follow_up.is_jamarat) {
@@ -124,12 +130,7 @@ const FoujTrip = (props) => {
                     )
                 }
 
-                if (b.assembly_time !== null) {
-                    child.data.push(
-                        { id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
-                    )
-                }
-
+                
                 return child
             })
             console.log('cleanedData', cleanedData)
@@ -139,6 +140,7 @@ const FoujTrip = (props) => {
             //     { title: 'الجدول', data: tripList },
             //     { title: 'الجدول', data: tripList }
             // ])
+
             setSectionList(cleanedData)
 
             setLoading(false)
@@ -222,7 +224,14 @@ const FoujTrip = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{direction} - {header}</Text>
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
+                        {header}
+                    </Text>
+
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 10}}>
+                        {direction}
+                    </Text>
+
                 </View>
             </View>
         )

@@ -40,33 +40,41 @@ const TripCard = (props) => {
 
         }
     }
-    return (
-        <View style={styles.container}>
-            <TouchableWithoutFeedback onPress={_updateTrip}>
 
-                <View style={styles.contentView}>
-                    <Text style={styles.contentText}>{item.title}</Text>
-                    {
-                        showTime
-                            ? (
-                                <Text style={{
-                                    color: Colors.secondary,
-                                    fontWeight: 'bold'
-                                }}>{item.time}</Text>
-                            )
-                            : (
-                                loading ? (<ActivityIndicator />) : (
-                                    <CheckBox color={Colors.primary}
-                                        checked={item.time !== null}
-                                        onPress={_updateTrip}
-                                        style={{ justifyContent: 'center', alignItems: 'center' }} />
+    const _content = () => {
+        return (
+            <View style={styles.container}>
+                <TouchableWithoutFeedback onPress={_updateTrip}>
+
+                    <View style={styles.contentView}>
+                        <Text style={styles.contentText}>{item.title}</Text>
+                        {
+                            showTime
+                                ? (
+                                    <Text style={{
+                                        color: Colors.secondary,
+                                        fontWeight: 'bold'
+                                    }}>{item.time}</Text>
                                 )
-                            )
-                    }
+                                : (
+                                    loading ? (<ActivityIndicator />) : (
+                                        <CheckBox color={Colors.primary}
+                                            checked={item.time !== null}
+                                            onPress={_updateTrip}
+                                            style={{ justifyContent: 'center', alignItems: 'center' }} />
+                                    )
+                                )
+                        }
 
-                </View>
-            </TouchableWithoutFeedback>
-        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        )
+    }
+    return (
+        <>
+            {_content()}
+        </>
     )
 }
 

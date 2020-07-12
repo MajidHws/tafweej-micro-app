@@ -34,14 +34,15 @@ const GuideFouj = (props) => {
             // batch.dispatching_time === null
             //             || (batch.dispatching_time !== null && batch.return_to_camp === null)
 
-            
+
 
             const cleanedData = data.schedule.map(b => {
+                if (b === null) return
 
                 console.log('b.direction = `${b.dispatch_location.name} إالى ${b.arrival_location.name}`', b.direction = `${b.dispatch_location.name} إالى ${b.arrival_location.name}`);
-                
+
                 const child = {
-                    direction: `${b.dispatch_location.name} إالى ${b.arrival_location.name}`,
+                    direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
                         { id: b.id, name: 'dispatch_time', time: b.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
                         { id: b.id, name: 'arrival_time', time: b.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
@@ -56,7 +57,7 @@ const GuideFouj = (props) => {
                     )
                 }
 
-                if (b.assembly_time !== null) {
+                if (b.has_assembly) {
                     child.data.push(
                         { id: b.id, name: 'assembly_time', time: b.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
@@ -64,10 +65,10 @@ const GuideFouj = (props) => {
 
                 return child
             })
-            if(data.schedule.length > 0) {
+            if (data.schedule.length > 0) {
 
                 setProgram(data.schedule[0].program)
-            }else {
+            } else {
                 setProgram({})
 
             }
@@ -103,7 +104,15 @@ const GuideFouj = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 20, fontWeight: 'bold' }}>{direction} - {header}</Text>
+
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
+                        {header}
+                    </Text>
+
+                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 10}}>
+                        {direction}
+                    </Text>
+
                 </View>
             </View>
         )
@@ -127,7 +136,7 @@ const GuideFouj = (props) => {
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <Text style={styles.heading}>{schedule !== null ? program.name : ''}</Text>
+                                        <Text style={[styles.heading, {fontWeight: 'bold'}]}>{schedule !== null ? program.name : ''}</Text>
                                     </View>
                                 ) : (<ActivityIndicator />)
                             }
