@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import {
     View, Text, StyleSheet, Image, TextInput,
     KeyboardAvoidingView, TouchableOpacity,
-    AsyncStorage, Dimensions,
+    AsyncStorage, Dimensions, Platform,
     ActivityIndicator
 } from 'react-native'
+import { Container } from 'native-base'
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios'
 import image from '../../../assets/img/1.png'
@@ -20,6 +21,8 @@ const Login = (props) => {
 
     const LOGIN_URL = `${login}`
     const ME_URL = `${me}`
+
+    const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
 
     const [modalVisible, setModalVisible] = useState(false)
     const [signing, setSigning] = useState(false)
@@ -63,14 +66,14 @@ const Login = (props) => {
                 console.log('----', result.data);
 
 
-                    const userInfo = JSON.stringify(result.data)
+                const userInfo = JSON.stringify(result.data)
 
-                    AsyncStorage.setItem('userInfo', userInfo)
-                    AsyncStorage.setItem('userToken', userToken)
+                AsyncStorage.setItem('userInfo', userInfo)
+                AsyncStorage.setItem('userToken', userToken)
 
-                    toIntro()
-                    //setSigning(false)
-                    return
+                toIntro()
+                //setSigning(false)
+                return
             }
         } catch (e) {
             setSigning(false)
@@ -82,7 +85,7 @@ const Login = (props) => {
     const modal = () => {
         return (
             <View style={styles.modalView}>
-                <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
+                <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset} style={{ flex: 1 }}>
                     <View style={styles.modalHeadingView}>
                         <Text style={styles.modalHeading}>{ArText.enterMobileNumber}</Text>
                     </View>
@@ -115,10 +118,9 @@ const Login = (props) => {
         _goToTabs()
     }, [])
 
-    const _content = () => {
+    const _body = () => {
         return (
-            <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
-
+            <>
                 <KeyboardAvoidingView behavior={'padding'}>
                     <TModal modalVisible={modalVisible} setModalVisible={setModalVisible} >
                         {modal()}
@@ -153,7 +155,7 @@ const Login = (props) => {
                     {
                         signing
                             ? (
-                                <View style={{paddingVertical: 15}}>
+                                <View style={{ paddingVertical: 15 }}>
                                     <ActivityIndicator />
                                 </View>
                             )
@@ -167,14 +169,30 @@ const Login = (props) => {
                     </TouchableOpacity> */}
 
                 </View>
-
-            </KeyboardAvoidingView>
-
+            </>
         )
     }
+    const _content = () => {
+        return (
+            <>
+                {
+                    Platform.OS === 'ios' ? (
+                        <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
+                            {_body()}
+                        </KeyboardAvoidingView>
+                    ) : (_body())
+                }
+            </>
+        )
+    }
+
     return (
         <>
-            {checkingAuth ? (<ActivityIndicator />) : _content()}
+            {checkingAuth ? (<ActivityIndicator />) : (
+                <Container style={{ flex: 1 }}>
+                    {_content()}
+                </Container>
+            )}
         </>
     )
 }
