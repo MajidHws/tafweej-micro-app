@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tafweej",
-    "slug": "tafweej",
+    "name": "tafweej-micro-app",
+    "slug": "tafweej-micro-app",
     "platforms": [
       "ios",
       "android",

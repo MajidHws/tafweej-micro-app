@@ -89,8 +89,8 @@ const Intro = (props) => {
 
             <View style={styles.skipView}>
                 <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => _goToHome()}>
-                    <Text style={styles.skipText}>{ArText.skip}</Text>
                     <FontAwesome5 name="chevron-left" color={Colors.primary} size={15} />
+                    <Text style={styles.skipText}>{ArText.skip}</Text>
                 </TouchableOpacity>
             </View>
             <>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     skipView: {
         position: 'absolute',
         bottom: height * .18,
-        right: width * .05,
+        left: width * .05,
         flexDirection: 'row',
         alignItems: 'center',
         zIndex: 10,

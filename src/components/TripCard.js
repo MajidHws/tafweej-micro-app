@@ -47,7 +47,7 @@ const TripCard = (props) => {
                 <TouchableWithoutFeedback onPress={_updateTrip}>
 
                     <View style={styles.contentView}>
-                        <Text style={styles.contentText}>{item.title}</Text>
+                        
                         {
                             showTime
                                 ? (
@@ -65,6 +65,7 @@ const TripCard = (props) => {
                                     )
                                 )
                         }
+                        <Text style={styles.contentText}>{item.title}</Text>
 
                     </View>
                 </TouchableWithoutFeedback>
@@ -81,6 +82,7 @@ const TripCard = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // direction: 'rtl'
         // marginHorizontal: 10
     },
     contentView: {
@@ -90,6 +92,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
+        
         // borderRadius: 10
         // alignItems: 'center'
     },

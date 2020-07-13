@@ -27,7 +27,7 @@ const Login = (props) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [signing, setSigning] = useState(false)
 
-    const [personalId, setPersonalId] = useState('1')
+    const [personalId, setPersonalId] = useState('a1')
     const [password, setPassword] = useState('1122334455')
     const [checkingAuth, setCheckingAuth] = useState(true)
 
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     inputView: {
         borderBottomColor: Colors.borderColor,
         borderBottomWidth: 1,
+        backgroundColor: '#fff'
     },
     input: {
         textAlign: 'right',

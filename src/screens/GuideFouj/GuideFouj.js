@@ -105,11 +105,11 @@ const GuideFouj = (props) => {
                     // borderBottomRightRadius: 20
                 }}>
 
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
                         {header}
                     </Text>
 
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 10}}>
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10 }}>
                         {direction}
                     </Text>
 
@@ -136,7 +136,7 @@ const GuideFouj = (props) => {
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <Text style={[styles.heading, {fontWeight: 'bold'}]}>{schedule !== null ? program.name : ''}</Text>
+                                        <Text style={[styles.heading, { fontWeight: 'bold' }]}>{schedule !== null ? program.name : ''}</Text>
                                     </View>
                                 ) : (<ActivityIndicator />)
                             }
@@ -149,11 +149,17 @@ const GuideFouj = (props) => {
             </View>
 
             <Container style={{
-
             }}>
-                <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
+                <Tabs
+                initialPage={1}
+                    tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
 
-                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'الجدول'}</Text></TabHeading>}>
+                    <Tab heading={<TabHeading style={{ backgroundColor: "#fff" }}><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
+                        <FoujTrip id={id} />
+                    </Tab>
+
+                    <Tab
+                        heading={<TabHeading style={{ backgroundColor: "#fff" }}><Text style={styles.tabTitle}>{'الجدول'}</Text></TabHeading>}>
                         {/* <FoujList
                             navigation={props.navigation}
                             goToFoujDetails={_goToFoujDetails}
@@ -172,7 +178,7 @@ const GuideFouj = (props) => {
                         </View> */}
 
                         <SectionList
-                            contentContainerStyle={styles.listStyle}
+                            contentContainerStyle={[styles.listStyle]}
                             keyExtractor={(item, i) => String(i)}
                             sections={schedule}
                             renderItem={({ item }, i) => <TripCard showTime={true} item={item} key={i} />}
@@ -181,9 +187,7 @@ const GuideFouj = (props) => {
 
                     </Tab>
 
-                    <Tab heading={<TabHeading><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
-                        <FoujTrip id={id} />
-                    </Tab>
+
 
                 </Tabs>
             </Container>

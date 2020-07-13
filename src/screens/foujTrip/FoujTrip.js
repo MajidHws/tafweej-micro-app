@@ -216,7 +216,7 @@ const FoujTrip = (props) => {
 
     const _listHeader = (header, direction) => {
         return (
-            <View style={{ paddingRight: 0, }}>
+            <View style={{ paddingRight: 0 }}>
                 {/* <View style={{height: 20, backgroundColor: '#fff'}}/> */}
                 <View style={{
                     backgroundColor: Colors.primary,
@@ -224,11 +224,11 @@ const FoujTrip = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
                         {header}
                     </Text>
 
-                    <Text style={{ textAlign: 'left', color: '#fff', fontSize: 10}}>
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10}}>
                         {direction}
                     </Text>
 
