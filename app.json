@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tafweej-micro-app",
-    "slug": "tafweej-micro-app",
+    "name": "Tafweej",
+    "slug": "tafweej2020",
     "platforms": [
       "ios",
       "android",
@@ -22,7 +22,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hajjtafweej.micro",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.hajjtafweej.micro",
+      "versionCode": 2,
+      "icon": "./assets/icon.png"
     },
     "description": ""
   }

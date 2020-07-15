@@ -44,8 +44,8 @@ const GuideFouj = (props) => {
                 const child = {
                     direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
-                        { id: b.id, name: 'dispatch_time', time: b.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name },
-                        { id: b.id, name: 'arrival_time', time: b.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.id, name: 'dispatch_time', time: b.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.id, name: 'arrival_time', time: b.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
                         // { id: b.dispatch_time, name: 'is_jamarat', time: b.is_jamarat, title: 'الرمية' }
                     ]
                 }
@@ -105,13 +105,13 @@ const GuideFouj = (props) => {
                     // borderBottomRightRadius: 20
                 }}>
 
-                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 15, fontWeight: 'bold' }}>
                         {header}
                     </Text>
 
-                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10 }}>
+                    {/* <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10 }}>
                         {direction}
-                    </Text>
+                    </Text> */}
 
                 </View>
             </View>

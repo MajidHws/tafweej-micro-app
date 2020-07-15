@@ -3,7 +3,7 @@ import {
     View, Text, StyleSheet, Image, TextInput,
     KeyboardAvoidingView, TouchableOpacity,
     AsyncStorage, Dimensions, Platform,
-    ActivityIndicator
+    ActivityIndicator, Alert
 } from 'react-native'
 import { Container } from 'native-base'
 import { StackActions } from '@react-navigation/native';
@@ -27,8 +27,8 @@ const Login = (props) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [signing, setSigning] = useState(false)
 
-    const [personalId, setPersonalId] = useState('a1')
-    const [password, setPassword] = useState('1122334455')
+    const [personalId, setPersonalId] = useState('')
+    const [password, setPassword] = useState('')
     const [checkingAuth, setCheckingAuth] = useState(true)
 
     AsyncStorage.removeItem('userInfo')
@@ -52,7 +52,7 @@ const Login = (props) => {
 
             // const result = await axios.post(`http://tafweej-app.hajjtafweej.net/api/auth/login?personal_id=${personalId}&password=${password}`, {}, { headers })
             const result = await axios.post(`${LOGIN_URL}?personal_id=${personalId}&password=${password}`, {}, { headers })
-            // console.log(result.data)
+            // console.log(result.data) 
             const userToken = result.data.access_token
 
 
@@ -77,6 +77,7 @@ const Login = (props) => {
             }
         } catch (e) {
             setSigning(false)
+            Alert.alert('تنبيه', 'خطأ في بيانات الدخول')
             console.log(e)
         }
     }
@@ -96,7 +97,7 @@ const Login = (props) => {
                             style={styles.modalInput} />
                     </View>
                     <View style={styles.modalBtnView}>
-                        <TButton title={ArText.resetPassword} action={() => toIntro()} />
+                        {/* <TButton title={ArText.resetPassword} action={() => toIntro()} /> */}
                     </View>
                 </KeyboardAvoidingView>
             </View>

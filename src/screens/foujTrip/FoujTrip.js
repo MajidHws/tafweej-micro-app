@@ -111,8 +111,8 @@ const FoujTrip = (props) => {
                 const child = {
                     direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
-                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: 'وقت الخروج', from: b.dispatch_location.name, to: b.arrival_location.name},
-                        { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: 'وقت الوصول', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name},
+                        { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
                         // { id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
                     ]
                 }
@@ -228,9 +228,9 @@ const FoujTrip = (props) => {
                         {header}
                     </Text>
 
-                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10}}>
+                    {/* <Text style={{ textAlign: 'right', color: '#fff', fontSize: 10}}>
                         {direction}
-                    </Text>
+                    </Text> */}
 
                 </View>
             </View>
