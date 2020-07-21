@@ -140,7 +140,7 @@ const Login = (props) => {
                             <TextInput
                                 onChangeText={(text) => setPersonalId(text)}
                                 value={personalId}
-                                placeholder={ArText.mobileNumber}
+                                placeholder={'رقم الهوية'}
                                 style={styles.input} />
                         </View>
                         <View style={styles.inputView}>
