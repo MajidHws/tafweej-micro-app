@@ -107,26 +107,29 @@ const FoujTrip = (props) => {
             const cleanedData = result.data.batch_following_up.map(b => {
 
                 b.direction = '-'
-
+                
+                // const day_hijri = b.batch_follow_up.day_hijri
+                // const day_hijri = b.batch_follow_up.day_hijri
+                
                 const child = {
                     direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
-                        { id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name},
-                        { id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
-                        // { id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
+                        {start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name},
+                        {start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                        // {start_at: b.operation.start_at.trim(), end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
                     ]
                 }
 
                 if (b.batch_follow_up.has_assembly) {
                     child.data.push(
-                        { id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
                 if (b.batch_follow_up.is_jamarat) {
                     child.data.push(
-                        { id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
-                        { id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
