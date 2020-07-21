@@ -62,6 +62,7 @@ const TripCard = (props) => {
         console.log('item', item);
         
         if (showTime) return
+        _uploadData()
         var d = new Date();
         var h = d.getHours();
         var m = d.getMinutes();
@@ -80,7 +81,7 @@ const TripCard = (props) => {
         // if(!item.time) return alert('')
         if (item.time === true || item.time) return Alert.alert('تنيه', 'لا يمكن تحديث الوقت مرتين')
 
-        _uploadData()
+        
 
         try {
             setLoading(true)
