@@ -8,7 +8,7 @@ import { Colors } from '../utils/Colors'
 import { CheckBox } from 'native-base'
 import Axios from 'axios'
 import moment from 'moment-hijri'
-import {isAfter} from 'date-fns'
+import { isAfter } from 'date-fns'
 
 const TripCard = (props) => {
     const { showTime } = props
@@ -60,7 +60,7 @@ const TripCard = (props) => {
     }
     const _updateTrip = async () => {
         console.log('item', item);
-        
+
         if (showTime) return
         _uploadData()
         var d = new Date();
@@ -73,15 +73,16 @@ const TripCard = (props) => {
         var convertedDate = moment(`${data.data.hijri.year}/${data.data.hijri.month.number}/${item.day}`, 'iYYYY/iM/iD').format('YYYY-M-D').split('-'); // 2014-11-28 16:40:00
 
         // if (day !== convertedDate[2]) return alert(`هذه المرحلة ليوم ${item.day}`)
+        if (!item.start_at) return alert('TIME ERROR')
         const itemTime = item.start_at.trim().split(':')
         var isInRage = isAfter(new Date(convertedDate[0], convertedDate[1], item.day, itemTime[0], itemTime[1]), new Date(convertedDate[0], convertedDate[1], convertedDate[2], h, m))
         // return console.log(`${isInRage} ${item.day} today: ${data.data.hijri.day}`)
         if (!isInRage) return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
-        
+
         // if(!item.time) return alert('')
         if (item.time === true || item.time) return Alert.alert('تنيه', 'لا يمكن تحديث الوقت مرتين')
 
-        
+
 
         try {
             setLoading(true)
@@ -94,7 +95,8 @@ const TripCard = (props) => {
 
             setItem(() => ({
                 ...item,
-                time: true
+                time: true,
+                user_dispatch_time: `${h + ':' + m}`
             }))
 
             setLoading(false)
@@ -123,10 +125,33 @@ const TripCard = (props) => {
                                 )
                                 : (
                                     loading ? (<ActivityIndicator />) : (
-                                        <CheckBox color={Colors.primary}
-                                            checked={item.time !== null}
-                                            onPress={_updateTrip}
-                                            style={{ justifyContent: 'center', alignItems: 'center' }} />
+                                        <View style={{
+                                            flex: 1,
+                                            flexDirection: 'row'
+                                        }}>
+
+                                            <CheckBox color={Colors.primary}
+                                                checked={item.time !== null}
+                                                onPress={_updateTrip}
+                                                style={{ justifyContent: 'center', alignItems: 'center' }} />
+
+                                            <View style={{
+                                                flex: 1,
+                                                flexDirection: 'row',
+                                                marginHorizontal: 30
+                                            }}>
+                                                <Text style={{
+                                                    color: Colors.secondary,
+                                                    fontWeight: 'bold',
+                                                    marginHorizontal: 10
+                                                }}>{item.user_dispatch_time ? item.user_dispatch_time : '--:--'}</Text>
+                                                <Text style={{
+                                                    color: Colors.secondary,
+                                                    fontWeight: 'bold'
+                                                }}>{item.dispatch_time ? item.dispatch_time : item.arrival_time}</Text>
+                                            </View>
+
+                                        </View>
                                     )
                                 )
                         }
