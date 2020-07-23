@@ -89,8 +89,8 @@ const TripCard = (props) => {
 
             // console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${item.id}&${item.name}=${new Date().getTime()}`);
             // console.log(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`);
-
-            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${h + ':' + m}`)
+            const userInfo = await AsyncStorage.getItem('userInfo')
+            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${h + ':' + m}&user_id=${userInfo.id}`)
             // const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&${item.name}=${new Date().getTime()}`)
 
             setItem(() => ({
