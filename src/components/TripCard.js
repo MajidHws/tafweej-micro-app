@@ -219,9 +219,7 @@ const TripCard = (props) => {
 
         const params = `?user_id=${userInfoJson.id}&batch_id=${item.id}&action_id=${id}&action_type=${type}&action_time=${h}:${m}`
 
-        const url = type === 'arrival_time'
-            ? 'http://tafweej-app.hajjtafweej.net/api/store-dispatch-or-arrival-action' + params
-            : 'http://tafweej-app.hajjtafweej.net/api/store-dispatch-or-arrival-action' + params
+        const url = 'http://tafweej-app.hajjtafweej.net/api/store-dispatch-or-arrival-action' + params
 
         try {
             const result = await Axios.post(url)
