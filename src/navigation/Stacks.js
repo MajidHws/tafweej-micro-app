@@ -9,6 +9,7 @@ import FoujTrip from '../screens/foujTrip/FoujTrip';
 import Tabs from './Tabs'
 import GuideTabs from './GuideTabs'
 import GuideFouj from '../screens/GuideFouj/GuideFouj';
+import TripDetails from '../screens/foujTrip/TripDetails'
 
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -41,6 +42,7 @@ const LoginStackScreen = () => {
                     options={({ route }) => ({ headerShown: false })} />
                 <LoginStack.Screen name="Intro" component={Intro} options={({ route }) => ({ headerShown: false })} />
                 <LoginStack.Screen name="Tabs" component={tabNav} options={({ route }) => ({ headerShown: false })} />
+                <LoginStack.Screen name="TripDetails" component={TripDetails} options={({ route }) => ({ headerShown: false })} />
             </LoginStack.Navigator>
         ) : (
                 <LoginStack.Navigator initialRouteName="Login">
@@ -70,6 +72,7 @@ const LoginStackScreen = () => {
                             component={Login}
                             options={({ route }) => ({ headerShown: false })} />
                         <LoginStack.Screen name="Trip" component={FoujTrip} options={({ route }) => ({ headerShown: false })} />
+                        <LoginStack.Screen name="TripDetails" component={TripDetails} options={({ route }) => ({ headerShown: false })} />
                         <Stack.Screen name="guideFouj" component={GuideFouj} options={({ route }) => ({ headerShown: false })} />
                         <LoginStack.Screen name="Intro" component={Intro} options={({ route }) => ({ headerShown: false })} />
                         <LoginStack.Screen name="Tabs" component={tabNav} options={({ route }) => ({ headerShown: false })} />

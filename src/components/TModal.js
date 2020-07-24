@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Modal, TouchableHighlight, TouchableWithoutFeedback, Button } from 'react-native'
+import { View, Text, StyleSheet, Modal, 
+    TouchableHighlight, TouchableWithoutFeedback, 
+    Button, Keyboard } from 'react-native'
 
 const TModal = (props) => {
     const { modalVisible, setModalVisible } = props
     return (
         <Modal
-            
-            animationType={'fade'}
+            //animationType={'fade'}
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
             }}>
-            <View style={styles.modal} onPress={() => setModalVisible(false)}>
-                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modal} onPress={() => ''}>
+                <TouchableWithoutFeedback onPress={() => ''}>
                     {props.children}
                 </TouchableWithoutFeedback>
-                    
             </View>
         </Modal>
     )
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     modal: {
         backgroundColor: 'rgba(0, 0, 0, .5)',
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center'
     }
 })

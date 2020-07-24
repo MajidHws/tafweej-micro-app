@@ -10,7 +10,7 @@ const { height, width } = Dimensions.get('screen')
 import { Container, Header, Tab, Tabs, TabHeading, Icon, Button } from 'native-base';
 import { Colors } from '../../utils/Colors';
 import { FontAwesome, Octicons } from '@expo/vector-icons'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import TModal from '../../components/TModal'
 import TButton from '../../components/TButton'
 import Card from '../../components/Card'
@@ -30,9 +30,11 @@ const FoujTrip = (props) => {
     const [tripList, setTripList] = useState([])
     const [sectionList, setSectionList] = useState([])
     const [loading, setLoading] = useState(false)
-
+    const [modalVisible, setModalVisible] = useState(false)
     const [activeSections, setActiveSections] = useState([])
     const [sections, setSections] = useState([])
+
+    const [selectedItem, setSelectedItem] = useState([1, 2, 3, 4])
 
     const SECTIONS = [
         {
@@ -107,33 +109,33 @@ const FoujTrip = (props) => {
             const cleanedData = result.data.batch_following_up.map(b => {
 
                 b.direction = '-'
-                
+
                 // const day_hijri = b.batch_follow_up.day_hijri
                 // const day_hijri = b.batch_follow_up.day_hijri
-                
+
                 const child = {
                     direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
                     title: b.operation.name, data: [
-                        {user_dispatch_time: b.batch_follow_up.dispatch_time,arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'dispatch_time', time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name},
-                        {user_dispatch_time: b.batch_follow_up.dispatch_time,arrival_time: b.arrival_time,dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_time', time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'dispatch_time', is_arrival: false, time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_time', is_arrival: true,  time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
                         // {start_at: b.operation.start_at.trim(), end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
                     ]
                 }
 
                 if (b.batch_follow_up.has_assembly) {
                     child.data.push(
-                        {user_dispatch_time: b.batch_follow_up.dispatch_time,arrival_time: b.arrival_time,dispatch_time: b.dispatch_time,start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
                 if (b.batch_follow_up.is_jamarat) {
                     child.data.push(
-                        {user_dispatch_time: b.batch_follow_up.dispatch_time,arrival_time: b.arrival_time,dispatch_time: b.dispatch_time,start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
-                        {user_dispatch_time: b.batch_follow_up.dispatch_time,arrival_time: b.arrival_time,dispatch_time: b.dispatch_time,start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
-                
+
                 return child
             })
             console.log('cleanedData', cleanedData)
@@ -227,7 +229,7 @@ const FoujTrip = (props) => {
                     // borderTopRightRadius: 20,
                     // borderBottomRightRadius: 20
                 }}>
-                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>                        
+                    <Text style={{ textAlign: 'right', color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
                         {header}
                     </Text>
 
@@ -244,7 +246,33 @@ const FoujTrip = (props) => {
             <View style={styles.container}>
 
 
+                {/* <TModal
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    item={selectedItem}
+                >
+                    <View style={{
+                        flex: 1,
+                        height: 450,
+                        width: '100%',
+                        bottom: 0,
+                        backgroundColor: 'white',
+                        padding: 20
+                    }}>
 
+                        <TouchableWithoutFeedback style={{backgroundColor: 'red'}} onPress={() => alert('')}>
+                            <Text>TEXT</Text>
+                        <FlatList
+                            contentContainerStyle={styles.listStyle}
+                            keyExtractor={(item) => String(item)}
+                            data={selectedItem}
+                            renderItem={({ item }, i) => <TripCard item={item} key={i} />}
+                        />
+                        </TouchableWithoutFeedback>
+
+
+                    </View>
+                </TModal> */}
                 {loading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator />
@@ -261,24 +289,50 @@ const FoujTrip = (props) => {
                                 renderContent={_renderContent}
                                 onChange={_updateSections}
                             /> */}
-
+                            {/* 
                             <SectionList
                                 contentContainerStyle={styles.listStyle}
                                 keyExtractor={(item, i) => String(i)}
                                 sections={sectionList}
                                 renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
                                 renderSectionHeader={({ section }) => _listHeader(section.title, section.direction)}
+                            /> */}
+
+                            <ScrollView>
+
+                            <FlatList
+                                contentContainerStyle={[styles.listStyle, { paddingTop: 0 }]}
+                                keyExtractor={(item, i) => String(i)}
+                                data={sectionList}
+                                renderItem={({ item }, i) => <TouchableOpacity
+                                    onPress={() => {
+                                        console.log('before navigating: ', item);
+                                        {/* setModalVisible(true) */}
+                                        props.navigation.navigate('TripDetails', {item: item})
+                                    }}
+                                    style={{
+                                        backgroundColor: Colors.primary,
+                                        padding: 10,
+                                        //marginHorizontal: 8,
+                                        marginVertical: 2,
+                                        //borderRadius: 10,
+                                        alignItems: 'flex-end',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'
+                                    }}>
+                                    <FontAwesome name="chevron-left" color={'white'} size={20} />
+                                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
+                                </TouchableOpacity>}
+                            //renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
                             />
 
-                            {/* <FlatList
-                                contentContainerStyle={styles.listStyle}
-                                keyExtractor={(item, i) => String(i)}
-                                data={tripList}
-                                renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                            /> */}
+                            </ScrollView>
+
                             {/* <View style={styles.confirmTripView}>
                                 <TButton title={ArText.confirmTrip} action={() => alert('')} />
                             </View> */}
+
                         </View>
                     )}
 
@@ -501,7 +555,7 @@ const styles = StyleSheet.create({
         // marginHorizontal: 10
     },
     listStyle: {
-        //  flex: 1 ,
+        flex: 1,
         // paddingTop: 10
     },
     confirmTripView: {

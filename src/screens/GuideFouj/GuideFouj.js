@@ -155,7 +155,7 @@ const GuideFouj = (props) => {
                     tabBarUnderlineStyle={{ borderBottomWidth: 4, borderColor: Colors.primary }}>
 
                     <Tab heading={<TabHeading style={{ backgroundColor: "#fff" }}><Text style={styles.tabTitle}>{'متابعة الحركة'}</Text></TabHeading>}>
-                        <FoujTrip id={id} />
+                        <FoujTrip navigation={props.navigation} id={id} />
                     </Tab>
 
                     <Tab

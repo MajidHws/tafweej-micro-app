@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
     View, Text, StyleSheet, ActivityIndicator,
-    TouchableWithoutFeedback, Alert, AsyncStorage
+    TouchableWithoutFeedback, Alert, AsyncStorage, TouchableOpacity
 } from 'react-native'
 
 import { Colors } from '../utils/Colors'
@@ -15,6 +15,9 @@ const TripCard = (props) => {
 
     const [item, setItem] = useState(props.item)
     const [loading, setLoading] = useState(false)
+
+    const [arrivalActions, setArrivalActions] = useState([])
+    const [dispatchActions, setDispatchActions] = useState([])
 
     const _saveOffline = async (id, name, hour, minute) => {
         try {
@@ -90,7 +93,9 @@ const TripCard = (props) => {
             // console.log(`http://dev.hajjtafweej.net/api/batche-timeline?id=${item.id}&${item.name}=${new Date().getTime()}`);
             // console.log(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${new Date().getTime()}`);
             const userInfo = await AsyncStorage.getItem('userInfo')
-            const result = await Axios.post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${h + ':' + m}&user_id=${userInfo.id}`)
+            const userInfoJson = JSON.parse(userInfo)
+            const result = await Axios
+                .post(`http://tafweej-app.hajjtafweej.net/api/store-following-up-batch?id=${item.id}&${item.name}=${h + ':' + m}&user_id=${userInfoJson.id}`)
             // const result = await Axios.post(`http://dev.hajjtafweej.net/api/batche-timeline?id=${trip.id}&${item.name}=${new Date().getTime()}`)
 
             setItem(() => ({
@@ -162,9 +167,93 @@ const TripCard = (props) => {
             </View>
         )
     }
+
+    const _fetchDispatch = async () => {
+        try {
+            const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/dispatch-actions')
+            console.log(result.data)
+            setDispatchActions(result.data.dispatch_actions)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const _fetchArrival = async () => {
+        try {
+            const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/arrival-actions')
+            console.log(result.data)
+            setArrivalActions(result.data.arrival_actions)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+
+    const _dispatchSteps = async () => {
+        return (<><Text>Dispatch</Text></>)
+    }
+
+    const _arrivalSteps = (arrivalActions) => {
+        const actions = arrivalActions.map(action => <TouchableOpacity onPress={() => _updateArrivalAction('arrival', action.id)} style={{ backgroundColor: Colors.secondary, padding: 10, borderRadius: 10 }}>
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>{action.name}</Text>
+        </TouchableOpacity>)
+        return (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', margin: 20 }}>{actions}</View>)
+    }
+
+    useEffect(() => {
+        _fetchDispatch()
+        _fetchArrival()
+    }, [])
+
+    const _updateArrivalAction = async (type, id) => {
+
+        var d = new Date();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var day = d.getDate()
+        var year = d.getFullYear()
+
+        const userInfo = await AsyncStorage.getItem('userInfo')
+        const userInfoJson = JSON.parse(userInfo)
+
+        const params = `?user_id=${userInfoJson.id}&batch_id=${item.id}&action_id=${id}&action_type=${type}&action_time=${h}:${m}`
+
+        const url = type === 'arrival_time'
+            ? 'http://tafweej-app.hajjtafweej.net/api/store-dispatch-or-arrival-action' + params
+            : 'http://tafweej-app.hajjtafweej.net/api/store-dispatch-or-arrival-action' + params
+
+        try {
+            const result = await Axios.post(url)
+            alert('تم الحفظ')
+        } catch (e) {
+            alert('لم يتم الحفظ')
+            console.log(e);
+
+        }
+    }
+
     return (
         <>
+            {item.name === 'dispatch_time' ? (
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', margin: 20, direction: 'rtl' }}>
+                    {!showTime && (
+                        dispatchActions.length > 0 ?
+                            dispatchActions.map(action => <TouchableOpacity onPress={() => _updateArrivalAction('dispatch', action.id)} style={{ backgroundColor: Colors.secondary, padding: 10, borderRadius: 10 }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold' }}>{action.name}</Text>
+                            </TouchableOpacity>)
+                            : null
+                    )}
+                </View>
+            ) : null}
             {_content()}
+            {item.name === 'arrival_time' ? (
+                <View>
+                    {!showTime && (arrivalActions.length > 0 ? (_arrivalSteps(arrivalActions)) : null)}
+                </View>
+            ) : null}
+            {/* {_content()}
+            {_content()} */}
         </>
     )
 }
@@ -176,13 +265,13 @@ const styles = StyleSheet.create({
         // marginHorizontal: 10
     },
     contentView: {
-        backgroundColor: Colors.notificationCardBg,
+        backgroundColor: '#eee',
         marginBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 15,
-
+        //borderRadius: 10
         // borderRadius: 10
         // alignItems: 'center'
     },
