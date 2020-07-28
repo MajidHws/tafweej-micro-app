@@ -12,12 +12,59 @@ import { isAfter } from 'date-fns'
 
 const TripCard = (props) => {
     const { showTime } = props
+    const hide = [10, 11, 12, 13]
 
     const [item, setItem] = useState(props.item)
     const [loading, setLoading] = useState(false)
+    // if (hide.includes(item.id)) return console.log(hide.includes(item.id), item.id)
 
-    const [arrivalActions, setArrivalActions] = useState([])
-    const [dispatchActions, setDispatchActions] = useState([])
+
+    // const actionsList = [
+    //     {actions: [
+    //         { "id": 1, "name": "إتمام انزال", },
+    //         { "id": 2, "name": "بداية انزال", },
+    //     ]},
+    //     {actions: [
+    //         { "id": 1, "name": "إتمام انزال", },
+    //         { "id": 2, "name": "بداية انزال", },
+    //     ]}
+    // ]
+    // let arrivalActions = (item.title.includes('الجمرات')) ? []
+    //     : [
+    //         { "id": 1, "name": "إتمام انزال", },
+    //         { "id": 2, "name": "بداية انزال", },
+    //     ]
+
+
+    // let dispatchActions = (item.title.includes('الجمرات')) ? [] :
+    //     [
+    //         { "id": 1, "name": "إتمام اركاب", },
+    //         { "id": 2, "name": "بداية اركاب", },
+    //     ]
+
+
+    console.log(props.arrivalAction);
+    console.log(props.dispatchAction);
+    
+    const [dispatchActions, setDispatchActions] = useState(props.dispatchAction || [])
+    const [arrivalActions, setArrivalActions] = useState(props.arrivalAction || [])
+
+
+    // const [arrivalActions, setArrivalActions] = useState(() => {
+    //     // if (item.title.includes('الجمرات')) return []
+    //     return [
+    //         { "id": 1, "name": "إتمام انزال", },
+    //         { "id": 2, "name": "بداية انزال", },
+    //     ]
+    // })
+
+    // const [dispatchActions, setDispatchActions] = useState(() => {
+    //     // if (item.title.includes('الجمرات')) return []
+    //     return [
+    //         { "id": 1, "name": "إتمام اركاب", },
+    //         { "id": 2, "name": "بداية اركاب", },
+    //     ]
+    // })
 
     const _saveOffline = async (id, name, hour, minute) => {
         try {
@@ -65,27 +112,45 @@ const TripCard = (props) => {
         console.log('item', item);
 
         if (showTime) return
+        if (!item.start_at) return alert('TIME ERROR')
         _uploadData()
         var d = new Date();
         var h = d.getHours();
         var m = d.getMinutes();
         var day = d.getDate()
+        var month = d.getMonth() + 1
         var year = d.getFullYear()
-        const { data } = await Axios.get(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year}`)
-        console.log('data', data)
-        var convertedDate = moment(`${data.data.hijri.year}/${data.data.hijri.month.number}/${item.day}`, 'iYYYY/iM/iD').format('YYYY-M-D').split('-'); // 2014-11-28 16:40:00
-
+        console.log(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year} START`)
+        // const { data } = await Axios.get(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year}`)
+        console.log(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year} END`)
+        // console.log('data', data)
+        var convertedDate = moment(`1441/12/${item.day}`, 'iYYYY/iM/iD').format('YYYY-M-D').split('-'); // 2014-11-28 16:40:00
+        console.log(convertedDate);
+        console.log(year, month, day);
         // if (day !== convertedDate[2]) return alert(`هذه المرحلة ليوم ${item.day}`)
-        if (!item.start_at) return alert('TIME ERROR')
+
         const itemTime = item.start_at.trim().split(':')
-        var isInRage = isAfter(new Date(convertedDate[0], convertedDate[1], item.day, itemTime[0], itemTime[1]), new Date(convertedDate[0], convertedDate[1], convertedDate[2], h, m))
-        // return console.log(`${isInRage} ${item.day} today: ${data.data.hijri.day}`)
-        if (!isInRage) return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+        // var isInRage = isAfter(
+        //     new Date(year, month, day, h, m),
+        //     new Date(convertedDate[0], convertedDate[1], item.day, itemTime[0], itemTime[1]),
+        // )
+
+        // console.log(isInRage)
+        // if (!isInRage) return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+
+        if (month < Number(convertedDate[1])) {
+            console.log('--month', month);
+            return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+        } else if (month === Number(convertedDate[1])) {
+            console.log('same');
+
+            if (day < Number(convertedDate[2])) {
+                return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+            }
+        }
 
         // if(!item.time) return alert('')
         if (item.time === true || item.time) return Alert.alert('تنيه', 'لا يمكن تحديث الوقت مرتين')
-
-
 
         try {
             setLoading(true)
@@ -136,24 +201,25 @@ const TripCard = (props) => {
                                         }}>
 
                                             <CheckBox color={Colors.primary}
-                                                checked={item.time !== null}
+                                                checked={item.userTime !== null}
                                                 onPress={_updateTrip}
                                                 style={{ justifyContent: 'center', alignItems: 'center' }} />
 
-                                            <View style={{
+                                                <View style={{
                                                 flex: 1,
                                                 flexDirection: 'row',
-                                                marginHorizontal: 30
+                                                marginHorizontal: 15
                                             }}>
+                                            <Text style={{
+                                                    color: Colors.secondary,
+                                                    fontWeight: 'bold'
+                                                }}>{item.userTime ? item.userTime : "--:--"}</Text>
                                                 <Text style={{
                                                     color: Colors.secondary,
                                                     fontWeight: 'bold',
-                                                    marginHorizontal: 10
-                                                }}>{item.user_dispatch_time ? item.user_dispatch_time : '--:--'}</Text>
-                                                <Text style={{
-                                                    color: Colors.secondary,
-                                                    fontWeight: 'bold'
-                                                }}>{item.dispatch_time ? item.dispatch_time : item.arrival_time}</Text>
+                                                    marginHorizontal: 5
+                                                }}>{item.time ? item.time : '--:--'}</Text>
+                                                
                                             </View>
 
                                         </View>
@@ -168,51 +234,79 @@ const TripCard = (props) => {
         )
     }
 
-    const _fetchDispatch = async () => {
-        try {
-            const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/dispatch-actions')
-            console.log(result.data)
-            setDispatchActions(result.data.dispatch_actions)
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    // const _fetchDispatch = async () => {
+    //     try {
+    //         const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/dispatch-actions')
+    //         console.log(result.data)
+    //         setDispatchActions(() => result.data.dispatch_actions)
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 
-    const _fetchArrival = async () => {
-        try {
-            const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/arrival-actions')
-            console.log(result.data)
-            setArrivalActions(result.data.arrival_actions)
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    // const _fetchArrival = async () => {
+    //     try {
+    //         const result = await Axios.get('http://tafweej-app.hajjtafweej.net/api/arrival-actions')
+    //         console.log(result.data)
+    //         setArrivalActions(() => result.data.arrival_actions)
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 
 
 
-    const _dispatchSteps = async () => {
-        return (<><Text>Dispatch</Text></>)
-    }
+    // const _dispatchSteps = async () => {
+    //     return (<><Text>Dispatch</Text></>)
+    // }
 
     const _arrivalSteps = (arrivalActions) => {
-        const actions = arrivalActions.map(action => <TouchableOpacity onPress={() => _updateArrivalAction('arrival', action.id)} style={{ backgroundColor: Colors.secondary, padding: 10, borderRadius: 10 }}>
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>{action.name}</Text>
+
+
+        const actions = arrivalActions.map((action, i) => <TouchableOpacity key={i} onPress={() => _updateArrivalAction('arrival', action.id)} style={{ backgroundColor: Colors.secondary, padding: 15, borderRadius: 10, width: 120, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>{action.name}</Text>
         </TouchableOpacity>)
         return (<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', margin: 20 }}>{actions}</View>)
     }
 
     useEffect(() => {
-        _fetchDispatch()
-        _fetchArrival()
+        // _fetchDispatch()
+        // _fetchArrival()
     }, [])
 
     const _updateArrivalAction = async (type, id) => {
+
+        // var d = new Date();
+        // var h = d.getHours();
+        // var m = d.getMinutes();
+        // var day = d.getDate()
+        // var year = d.getFullYear()
 
         var d = new Date();
         var h = d.getHours();
         var m = d.getMinutes();
         var day = d.getDate()
+        var month = d.getMonth() + 1
         var year = d.getFullYear()
+        console.log(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year} START`)
+        // const { data } = await Axios.get(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year}`)
+        console.log(`http://api.aladhan.com/v1/gToH?date=${day}-${m}-${year} END`)
+        // console.log('data', data)
+        var convertedDate = moment(`1441/12/${item.day}`, 'iYYYY/iM/iD').format('YYYY-M-D').split('-'); // 2014-11-28 16:40:00
+        console.log(convertedDate);
+        console.log(year, month, day);
+
+
+        if (month < Number(convertedDate[1])) {
+            console.log('--month', month);
+            return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+        } else if (month === Number(convertedDate[1])) {
+            console.log('same');
+
+            if (day < Number(convertedDate[2])) {
+                return alert(`هذه المرحلة ليوم ${item.day} تبدأ ${item.start_at}`)
+            }
+        }
 
         const userInfo = await AsyncStorage.getItem('userInfo')
         const userInfoJson = JSON.parse(userInfo)
@@ -223,6 +317,7 @@ const TripCard = (props) => {
 
         try {
             const result = await Axios.post(url)
+            console.log(result)
             alert('تم الحفظ')
         } catch (e) {
             alert('لم يتم الحفظ')
@@ -233,23 +328,31 @@ const TripCard = (props) => {
 
     return (
         <>
-            {item.name === 'dispatch_time' ? (
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', margin: 20, direction: 'rtl' }}>
-                    {!showTime && (
-                        dispatchActions.length > 0 ?
-                            dispatchActions.map(action => <TouchableOpacity onPress={() => _updateArrivalAction('dispatch', action.id)} style={{ backgroundColor: Colors.secondary, padding: 10, borderRadius: 10 }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>{action.name}</Text>
-                            </TouchableOpacity>)
-                            : null
-                    )}
-                </View>
-            ) : null}
+            {
+                item.name === 'dispatch_time' ? (
+
+                    !showTime ? (
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', margin: 20, direction: 'rtl' }}>
+                            {!showTime && (
+                                dispatchActions.length > 0 ?
+                                    dispatchActions.map((action, i) => <TouchableOpacity key={i} onPress={() => _updateArrivalAction('dispatch', action.id)} style={{ backgroundColor: Colors.secondary, padding: 15, borderRadius: 10, width: 120, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>{action.name}</Text>
+                                    </TouchableOpacity>)
+                                    : null
+                            )}
+                        </View>
+                    ) : null
+
+                ) : null
+            }
             {_content()}
-            {item.name === 'arrival_time' ? (
-                <View>
-                    {!showTime && (arrivalActions.length > 0 ? (_arrivalSteps(arrivalActions)) : null)}
-                </View>
-            ) : null}
+            {
+                item.name === 'arrival_time' ? (
+                    <View>
+                        {!showTime && (arrivalActions.length > 0 ? (_arrivalSteps(arrivalActions)) : null)}
+                    </View>
+                ) : null
+            }
             {/* {_content()}
             {_content()} */}
         </>

@@ -108,35 +108,56 @@ const FoujTrip = (props) => {
             console.log('result.data.batch_following_up', result.data.batch_following_up)
             const cleanedData = result.data.batch_following_up.map(b => {
 
+                const hide = [10, 11, 12, 13]
+
                 b.direction = '-'
+
 
                 // const day_hijri = b.batch_follow_up.day_hijri
                 // const day_hijri = b.batch_follow_up.day_hijri
 
                 const child = {
                     direction: `${b.dispatch_location.name} الى ${b.arrival_location.name}`,
-                    title: b.operation.name, data: [
-                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'dispatch_time', is_arrival: false, time: b.batch_follow_up.dispatch_time, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
-                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_time', is_arrival: true,  time: b.batch_follow_up.arrival_time, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                    id: b.operation.id,
+                    hide: hide.includes(b.operation.id),
+                    title: b.operation.name, 
+                    data: [
+                        { time: '00:00',user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'dispatch_time', is_arrival: false, time: b.dispatch_time, userTime: null, title: b.dispatch_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
+                        { time: '00:00',user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_time', is_arrival: true, time: b.arrival_time, userTime: null, title: b.arrival_location.name, from: b.dispatch_location.name, to: b.arrival_location.name },
                         // {start_at: b.operation.start_at.trim(), end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.dispatch_time, name: 'is_jamarat', time: b.batch_follow_up.is_jamarat, title: 'الرمية' }
+                    ]
+                }
+
+                if (hide.includes(b.operation.id)) {
+                    b.arrivalAction = []
+                    b.dispatchAction = []
+                } else {
+                    b.arrivalAction = [
+                        { "id": 1, "name": "إتمام انزال", },
+                        { "id": 2, "name": "بداية انزال", },
+                    ]
+
+                    b.dispatchAction = [
+                        { "id": 1, "name": "إتمام اركاب", },
+                        { "id": 2, "name": "بداية اركاب", },
                     ]
                 }
 
                 if (b.batch_follow_up.has_assembly) {
                     child.data.push(
-                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {time: b.dispatch_time, user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'assembly_time', time: b.batch_follow_up.assembly_time, title: 'وقت التجمع', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
                 if (b.batch_follow_up.is_jamarat) {
                     child.data.push(
-                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
-                        { user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {time: b.dispatch_time, user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'back_to_tower_time', time: b.batch_follow_up.back_to_tower_time, title: 'العودة للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
+                        {time: b.dispatch_time, user_dispatch_time: b.batch_follow_up.dispatch_time, arrival_time: b.arrival_time, dispatch_time: b.dispatch_time, start_at: b.operation.start_at, end_at: b.operation.end_at, end_day: b.operation.end_day, day: b.operation.start_day, id: b.batch_follow_up.id, name: 'arrival_to_tower_time', time: b.batch_follow_up.arrival_to_tower_time, title: 'الوصول للفندق', from: b.dispatch_location.name, to: b.arrival_location.name },
                     )
                 }
 
-
-                return child
+b.child = child
+                return b
             })
             console.log('cleanedData', cleanedData)
 
@@ -241,6 +262,58 @@ const FoujTrip = (props) => {
             </View>
         )
     }
+
+    const _listItem = (item) => {
+        let movement = null
+        const isDone = item.child.data.every(d => d.time !== null || '')
+        if (false) {
+
+            movement = (<View
+                style={{
+                    backgroundColor: 'gray',
+                    padding: 10,
+                    //marginHorizontal: 8,
+                    marginVertical: 2,
+                    //borderRadius: 10,
+                    alignItems: 'flex-end',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
+                <FontAwesome name="check" color={'white'} size={20} />
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{item.child.title}</Text>
+            </View>)
+        } else {
+
+            movement = (<TouchableOpacity
+                onPress={() => {
+                    console.log('before navigating: ', item);
+                    props.navigation.navigate('TripDetails', { item: item })
+                }}
+                style={{
+                    backgroundColor: Colors.primary,
+                    padding: 10,
+                    //marginHorizontal: 8,
+                    marginVertical: 2,
+                    //borderRadius: 10,
+                    alignItems: 'flex-end',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
+                <FontAwesome name="chevron-left" color={'white'} size={20} />
+                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{item.child.title}</Text>
+            </TouchableOpacity>)
+        }
+
+
+
+        return (
+            <>
+                {movement}
+            </>
+        )
+    }
     const _content = () => {
         return (
             <View style={styles.container}>
@@ -300,32 +373,13 @@ const FoujTrip = (props) => {
 
                             <ScrollView>
 
-                            <FlatList
-                                contentContainerStyle={[styles.listStyle, { paddingTop: 0 }]}
-                                keyExtractor={(item, i) => String(i)}
-                                data={sectionList}
-                                renderItem={({ item }, i) => <TouchableOpacity
-                                    onPress={() => {
-                                        console.log('before navigating: ', item);
-                                        {/* setModalVisible(true) */}
-                                        props.navigation.navigate('TripDetails', {item: item})
-                                    }}
-                                    style={{
-                                        backgroundColor: Colors.primary,
-                                        padding: 10,
-                                        //marginHorizontal: 8,
-                                        marginVertical: 2,
-                                        //borderRadius: 10,
-                                        alignItems: 'flex-end',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
-                                    }}>
-                                    <FontAwesome name="chevron-left" color={'white'} size={20} />
-                                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-                                </TouchableOpacity>}
-                            //renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
-                            />
+                                <FlatList
+                                    contentContainerStyle={[styles.listStyle, { paddingTop: 0 }]}
+                                    keyExtractor={(item, i) => String(i)}
+                                    data={sectionList}
+                                    renderItem={({ item }, i) => _listItem(item)}
+                                //renderItem={({ item }, i) => <TripCard trip={trip} item={item} key={i} />}
+                                />
 
                             </ScrollView>
 

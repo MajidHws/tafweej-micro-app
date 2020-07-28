@@ -23,6 +23,11 @@ const TripDetails = (props) => {
     // const itemId = params ? params.itemId : null;
     // const otherParam = params ? params.otherParam : null;
     const { item } = props.route.params
+    console.log('item from trip details', item)
+    const arrivalAction = item.arrivalAction
+    const dispatchAction = item.dispatchAction
+    console.log('item from trip details arrivalAction', item.arrivalAction)
+    console.log('item from trip details dispatchAction', item.dispatchAction)
     const _guideStats = () => {
         return (
             <View style={[styles.statsContainerView, styles.shadow]}>
@@ -86,7 +91,7 @@ const TripDetails = (props) => {
                 <ImageBackground style={{ width: width, height: 200 }} resizeMode={'cover'} source={img5}>
                     <View style={styles.headingContainer}>
                         <View style={[styles.headingTitleView, {flex: 1, alignItems: 'flex-end'}]}>
-                            <Text style={styles.heading}>{item.title}</Text>
+                            <Text style={styles.heading}>{item.child.title}</Text>
                         </View>
                         <View style={[styles.headingIconView, { alignItems: "center", paddingHorizontal: 30 }]}>
                             {/* <Text style={styles.heading}>{ArText.analytic}</Text> */}
@@ -94,8 +99,6 @@ const TripDetails = (props) => {
                                 <FontAwesome name="chevron-right" color="#fff" size={20} />
                             </TouchableOpacity>
                         </View>
-
-
                     </View>
                 </ImageBackground>
             </View>
@@ -105,9 +108,9 @@ const TripDetails = (props) => {
             <View style={[styles.contentView, {paddingTop: 10}]}>
                 <FlatList
                     contentContainerStyle={styles.listStyle}
-                    keyExtractor={(item) => String(item.id)}
-                    data={item.data}
-                    renderItem={({ item }, i) => <TripCard trip={{}} item={item} key={item.id} />}
+                    keyExtractor={(item, i) => String(i)}
+                    data={item.child.data}
+                    renderItem={({ item }, i) => <TripCard trip={{}} item={item} arrivalAction={arrivalAction} dispatchAction={dispatchAction}/>}
                 />
                 {/* <View style={styles.confirmTripView}>
                     <TButton title={ArText.confirmTrip} action={() => alert('')} />
@@ -149,7 +152,8 @@ const styles = StyleSheet.create({
     },
     heading: {
         color: '#fff',
-        fontSize: 20
+        fontSize: 25,
+        fontWeight: 'bold'
 
     },
     addGuide: {
